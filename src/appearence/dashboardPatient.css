@@ -1,0 +1,31 @@
+.body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    position: fixed; 
+    width: 100%;
+  top: 0;
+  left: 0;
+  height: 80px; /* Adjust the height if needed */
+  background-color: #fff; /* Adjust the background color if needed */
+  z-index: 1000;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 64px; 
+    left: 0;
+    width: 240px; 
+    height: calc(100% - 64px); 
+    background-color: #f4f4f4;
+    padding-top: 20px;
+  }
+  
+  .content {
+    margin-left: 240px;
+    padding: 20px;
+    margin-top: 64px; 
+  }
+  

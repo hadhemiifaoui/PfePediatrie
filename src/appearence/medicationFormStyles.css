@@ -1,0 +1,27 @@
+/* medicationFormStyles.css */
+.form-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .text-field {
+    background-color: #e0f7fa;
+    border-radius: 4px;
+  }
+  
+  .date-picker {
+    background-color: #e0f7fa;
+    border-radius: 4px;
+  }
+  
+  .button {
+    background-color: #81d4fa;
+    color: #fff;
+  }
+  
+  .button:hover {
+    background-color: #4fc3f7;
+  }
+  

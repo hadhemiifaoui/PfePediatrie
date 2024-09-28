@@ -1,0 +1,41 @@
+.card {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }
+  
+  .card-body img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .card-title, .card-text {
+    margin-bottom: 15px;
+  }
+  
+  .card {
+    margin-top: 20px;
+  }
+  
+  .container {
+    max-width: 960px; /* Adjust the container width */
+  }
+  
+  .col-md-4, .col-md-8 {
+    margin-top: 20px;
+  }
+  
+  .list-group-item {
+    font-size: 14px;
+  }
+  
+  .card-body h5 {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .card-body p {
+    font-size: 14px;
+  }
+  

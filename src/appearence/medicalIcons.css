@@ -1,0 +1,24 @@
+/* medicalIcons.css */
+.medical-icons-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.icon-item {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.description {
+    font-size: 14px; /* Smaller size */
+    color: lightgray; /* Light gray color */
+    margin-right: 20px;
+}
+
+.icon {
+    font-size: 2em; /* Bigger size */
+    color: #a0c4ff; /* Pastel blue color */
+}

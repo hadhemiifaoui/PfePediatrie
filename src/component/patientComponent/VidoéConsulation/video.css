@@ -1,0 +1,115 @@
+.video-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #202124;
+  padding: 20px;
+}
+
+.video-container {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  margin: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid black;
+}
+
+video {
+  width: 100%;
+  height: auto;
+  background-color: black;
+  border-radius: 10px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #e1e1e1;
+}
+
+.controls p {
+  margin: 0;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #3a3b3c;
+  color: #e1e1e1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #575757;
+}
+
+.incoming-call-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.room-id-container {
+  margin: 20px 0;
+  color: #e1e1e1;
+  text-align: center;
+  width: 100%;
+}
+
+.room-id-container p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.room-id-container .MuiButton-root {
+  background-color: #3a3b3c;
+  color: #e1e1e1;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.room-id-container .MuiButton-root:hover {
+  background-color: #575757;
+}
+
+.floating-buttons {
+  display: flex;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.floating-button {
+  margin: 0 5px;
+  background-color: #3a3b3c;
+  color: #e1e1e1;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.floating-button:hover {
+  background-color: #575757;
+}
