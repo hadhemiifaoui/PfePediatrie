@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -17,18 +21,43 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install client dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+            client/ped_app/node_modules
+            server/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Frontend
+      - name: Install frontend dependencies
         working-directory: client/ped_app
         run: npm install
 
-      - name: Build client
+      - name: Lint frontend code
+        working-directory: client/ped_app
+        run: npm run lint
+
+      - name: Build frontend
         working-directory: client/ped_app
         run: npm run build
 
-      - name: Install server dependencies
+      - name: Run frontend tests
+        working-directory: client/ped_app
+        run: npm test
+
+      # Backend
+      - name: Install backend dependencies
         working-directory: server
         run: npm install
 
-      - name: Run server tests
+      - name: Lint backend code
+        working-directory: server
+        run: npm run lint
+
+      - name: Run backend tests
         working-directory: server
         run: npm test
