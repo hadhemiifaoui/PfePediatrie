@@ -16,34 +16,42 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.11.1'  # Update to your Node version
+          node-version: '20'  # Use the version you have installed locally
 
-      # Check for the frontend package.json existence
-      - name: Check frontend package.json existence
-        run: ls -la client/ped_app
+      # -----------------------
+      # Backend (Server) Setup
+      # -----------------------
 
-      # Frontend steps
-      - name: Install frontend dependencies
-        working-directory: client/ped_app
-        run: npm install
-
-      - name: Run frontend tests
-        working-directory: client/ped_app
-        run: npm test
-
-      - name: Build frontend project
-        working-directory: client/ped_app
-        run: npm run build
-
-      # Check for the backend package.json existence
-      - name: Check backend package.json existence
-        run: ls -la server
-
-      # Backend steps (if applicable)
       - name: Install backend dependencies
         working-directory: server
         run: npm install
 
       - name: Run backend tests
         working-directory: server
-        run: npm test
+        run: npm test  # Replace this with actual test command or skip if you don't have tests
+
+      # Run the server (if needed for client-side integration tests)
+      # But usually in CI, you don't run the server for long
+      # Comment out if unnecessary
+      #- name: Run backend server
+      #  working-directory: server
+      #  run: node server.js &
+
+      # -----------------------
+      # Frontend (Client) Setup
+      # -----------------------
+
+      - name: Check frontend package.json existence
+        run: ls -la client/ped_app  # This is just a check, may not be necessary
+
+      - name: Install frontend dependencies
+        working-directory: client/ped_app
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: client/ped_app
+        run: npm test  # Replace with your frontend test command
+
+      - name: Build frontend project
+        working-directory: client/ped_app
+        run: npm run build  # Usually builds for production
