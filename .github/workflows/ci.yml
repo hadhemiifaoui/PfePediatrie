@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '16'
 
-      # Check for the frontend package.json
+      # Check for the frontend package.json existence
       - name: Check frontend package.json existence
         run: ls -la client/ped_app
 
@@ -27,20 +27,15 @@ jobs:
         working-directory: client/ped_app
         run: npm install
 
-      - name: Run frontend tests (if specified)
+      - name: Run frontend tests
         working-directory: client/ped_app
-        run: |
-          if grep -q '"test":' package.json; then
-            npm test
-          else
-            echo "No tests specified, skipping frontend tests."
-          fi
+        run: npm test
 
       - name: Build frontend project
         working-directory: client/ped_app
         run: npm run build
 
-      # Check for the backend package.json
+      # Check for the backend package.json existence
       - name: Check backend package.json existence
         run: ls -la server
 
@@ -49,15 +44,11 @@ jobs:
         working-directory: server
         run: npm install
 
-      - name: Run backend tests (if specified)
+      - name: Run backend tests
         working-directory: server
-        run: |
-          if grep -q '"test":' package.json; then
-            npm test
-          else
-            echo "No tests specified, skipping backend tests."
-          fi
+        run: npm test
 
-      - name: Build backend project
-        working-directory: server
-        run: npm run build
+      # No backend build step needed, remove or comment out this line
+      # - name: Build backend project
+      #   working-directory: server
+      #   run: npm run build
