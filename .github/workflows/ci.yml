@@ -4,31 +4,74 @@ on:
   push:
     branches:
       - master  # Run CI only when code is pushed to the master branch
+  pull_request:
+    branches:
+      - master  # Also run CI on pull requests targeting the master branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
 
-      - name: Navigate to project directory
-        run: cd client/ped_app
+      # Caching Node.js modules for both frontend and backend
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            client/ped_app/node_modules
+            server/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Install dependencies
+      # Frontend Steps
+      # Step 3: Install frontend dependencies
+      - name: Install frontend dependencies
+        working-directory: client/ped_app
         run: npm install
-        working-directory: client/ped_app  # Specify the correct directory
 
-      - name: Run tests
-        run: npm test
-        working-directory: client/ped_app  # Specify the correct directory
+      # Step 4: Lint frontend code
+      - name: Lint frontend code
+        working-directory: client/ped_app
+        run: npm run lint
 
-      - name: Build the project
+      # Step 5: Build frontend
+      - name: Build frontend
+        working-directory: client/ped_app
         run: npm run build
-        working-directory: client/ped_app  # Specify the correct directory
+
+      # Step 6: Run frontend tests
+      - name: Run frontend tests
+        working-directory: client/ped_app
+        run: npm test
+
+      # Backend Steps
+      # Step 7: Install backend dependencies
+      - name: Install backend dependencies
+        working-directory: server
+        run: npm install
+
+      # Step 8: Lint backend code
+      - name: Lint backend code
+        working-directory: server
+        run: npm run lint
+
+      # Step 9: Run backend tests
+      - name: Run backend tests
+        working-directory: server
+        run: npm test
+
+      # Step 10: Build backend
+      - name: Build backend
+        working-directory: server
+        run: npm run build
