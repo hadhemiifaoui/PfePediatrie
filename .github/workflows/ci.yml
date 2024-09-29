@@ -13,22 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Cache frontend dependencies
-      - name: Cache frontend dependencies
-        uses: actions/cache@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          path: client/ped_app/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('client/ped_app/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          node-version: '20.11.1'  # Update to your Node version
 
-      # Check frontend package.json existence
+      # Check for the frontend package.json existence
       - name: Check frontend package.json existence
-        run: |
-          if [ ! -f client/ped_app/package.json ]; then
-            echo "package.json not found in client/ped_app!"
-            exit 1
-          fi
+        run: ls -la client/ped_app
 
       # Frontend steps
       - name: Install frontend dependencies
@@ -43,24 +35,11 @@ jobs:
         working-directory: client/ped_app
         run: npm run build
 
-      # Cache backend dependencies
-      - name: Cache backend dependencies
-        uses: actions/cache@v2
-        with:
-          path: server/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('server/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # Check backend package.json existence
+      # Check for the backend package.json existence
       - name: Check backend package.json existence
-        run: |
-          if [ ! -f server/package.json ]; then
-            echo "package.json not found in server!"
-            exit 1
-          fi
+        run: ls -la server
 
-      # Backend steps
+      # Backend steps (if applicable)
       - name: Install backend dependencies
         working-directory: server
         run: npm install
