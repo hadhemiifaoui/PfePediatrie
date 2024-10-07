@@ -1,42 +1,8 @@
-/*const socketIo = require('socket.io');
-
-let io; 
-
-const initializeNotificationSocket = (server) => {
-  io = socketIo(server, {
-    cors: {
-      origin: "http://localhost:3000", 
-      methods: ["GET", "POST", "PATCH", "DELETE"],
-    }
-  });
-
-  io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-    socket.on('sendNotification', (data) => {
-      io.emit('receiveNotification', data);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
-    });
-  });
-
-  return io; 
-};
-
-const getNotificationSocket = () => io;
-
-module.exports = { initializeNotificationSocket, getNotificationSocket };
-*/
-
-
-// socketServer.js
-
-
 
 const { Server } = require('socket.io');
 
-let io; 
+let io;
+const users = {}; 
 
 const initializeSocketServer = (server) => {
   io = new Server(server, {
@@ -46,21 +12,37 @@ const initializeSocketServer = (server) => {
       credentials: true,
     },
     transports: ['websocket', 'polling'],
-   // perMessageDeflate: false,
   });
 
+  // When a client connects
   io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-    
-    socket.on('sendNotification', (data) => {
-      console.log('Notification received:', data); 
-      io.emit('receiveNotification', data);
+    console.log('user connecté:', socket.id);
+
+    // Listen for the user to send their role (emit this from the frontend upon connection)
+    socket.on('userConnected', (userData) => {
+      users[socket.id] = userData; // Store user details by socket ID
+      console.log('user data:', userData);
     });
-  
+
+    // When a notification is sent, only emit it to admins
+    socket.on('sendNotification', (data) => {
+      console.log('notification reçu:', data);
+
+      // Send notification only to admin users
+      for (let socketId in users) {
+        if (users[socketId].role === 'admin') {
+          io.to(socketId).emit('receiveNotification', data);
+        }
+      }
+    });
+
+    // When a client disconnects, remove them from the users object
     socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
+      delete users[socket.id]; // Remove user from the list when they disconnect
+      console.log('user déconnecté:', socket.id);
     });
   });
+
   return io;
 };
 

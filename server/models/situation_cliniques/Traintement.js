@@ -12,9 +12,9 @@ const TraitementSchema = new mongoose.Schema({
     }],
     followUpInstructions: { type: String }, 
     dietaryRestrictions: { type: String },  
-    psychologicalSupport: { type: Boolean, default: false }, 
+    psychologicalSupport: { type: Boolean, default: false}, 
     additionalNotes: { type: String },  
-    diagnostic: { type: mongoose.Schema.Types.ObjectId, ref: 'Diagnostic' }, 
+    diagnostic: { type: mongoose.Schema.Types.ObjectId, ref: 'Diagnostic'}, 
     caseName: { type: mongoose.Schema.Types.ObjectId, ref: 'Case' }  
 });
 

@@ -21,14 +21,11 @@ const userSchema = new mongoose.Schema({
    speciality : {type : String},
    image : {type : String},
    address : {type : String},
-   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'childs' }] 
+   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'childs' }] ,
+   isActive: {
+      type: Boolean,
+      default: true,
+  }
 })
 const User = mongoose.model('users' , userSchema)
 module.exports = User
-
-
-
-/*resetPasswordToken: { type: String },
-   resetPasswordExpires: { type: Date },
-   twoFactorCode: { type: String },
-   twoFactorExpires: { type: Date },*/

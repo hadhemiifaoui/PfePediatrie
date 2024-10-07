@@ -35,7 +35,9 @@ router.post('/:id/createprofile',requireAuth, upload.single('image'), userContro
 router.put('/:id/createprofile',requireAuth, upload.single('image'), userController.CreatePedProfile);
 router.get('/pediatre/:id/children', requireAuth, userController.getPediatreChildren); 
 router.delete('/deleteAccount', requireAuth, userController.deleteAccounte);
+//router.put('/toggleActive', requireAuth, userController.toggleUserActivation);
 
+router.patch('/toggleActive', requireAuth, userController.toggleUserActivation);
 
 router.delete('/pediatricians/:pediatreId/children/:childId', requireAuth, userController.unlinkChildFromPediatre);
 

@@ -75,6 +75,52 @@ const login = async (req, res) => {
 
 
 
+const toggleUserActivation = async (req, res) => {
+  const { userIds, isActive } = req.body;
+
+  // Check if userIds and isActive are present
+  if (!userIds || !Array.isArray(userIds) || typeof isActive !== 'boolean') {
+    return res.status(400).json({ message: 'Invalid input data' });
+  }
+
+  try {
+    // Example: Update user activation status in the database
+    await User.updateMany({ _id: { $in: userIds } }, { isActive });
+    return res.status(200).json({ message: 'Users updated successfully' });
+  } catch (error) {
+    console.error('Error toggling user activation:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+/*
+const toggleUserActivation = async (req, res) => {
+  try {
+      const userId = req.params.id;
+      
+      const user = await User.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      user.isActive = !user.isActive;
+
+      await user.save();
+
+      const status = user.isActive ? 'activated' : 'deactivated';
+      console.log(`User ${status}:`, user.email);
+
+      return res.status(200).json({ message: `User successfully ${status}`, user });
+  } catch (err) {
+      console.error('Error during user activation toggle:', err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+*/
+
 const getUserById = async(req , res ) => {
        try{ 
           const id = req.params.id
@@ -446,7 +492,8 @@ module.exports = {
   getPediatreChildren,
   unlinkChildFromPediatre ,
   changePassword,
-  deleteAccounte
+  deleteAccounte,
+  toggleUserActivation
 };
 
 

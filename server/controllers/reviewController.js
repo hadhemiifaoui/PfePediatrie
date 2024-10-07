@@ -11,10 +11,16 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY
 );
 
-/*const addReview = async (req, res) => {
+const addReview = async (req, res) => {
   try {
-    const { content, createdBy } = req.body;
-    const review = new Review({ content, createdBy });
+    const { content, createdBy } = req.body; 
+    const user = await User.findById(createdBy);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const image = user.image;
+
+    const review = new Review({ content, createdBy, image }); 
     await review.save();
 
     const admins = await User.find({ role: 'Admin' });
@@ -32,69 +38,7 @@ webpush.setVapidDetails(
         await new Notification({
           reviewText: content,
           createdBy,
-          sentTo: admin._id,
-          read: false
-        }).save();
-      }
-    }));
-
-    const pushNotifications = admins.map(admin => {
-      return Subscription.find({ user: admin._id }).then(subscriptions => {
-        const payload = JSON.stringify({
-          title: 'New Review',
-          body: `A new review has been added: ${content}`,
-          icon: '/path-to-icon.png', 
-          url: '/admin/reviews' 
-        });
-
-        return Promise.all(
-          subscriptions.map(subscription => 
-            webpush.sendNotification(subscription, payload)
-          )
-        );
-      });
-    });
-
-    await Promise.all(pushNotifications);
-
-    res.status(201).json({ message: 'Review added, notifications created, and sent!' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to add review or send notifications!' });
-  }
-};*/
-
-const addReview = async (req, res) => {
-  try {
-    const { content, createdBy } = req.body; // Do not include the image in the destructuring
-
-    // Fetch the user to get the image
-    const user = await User.findById(createdBy);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const image = user.image; // Get the user's image
-
-    const review = new Review({ content, createdBy, image }); // Save the image in the Review
-    await review.save();
-
-    const admins = await User.find({ role: 'Admin' });
-
-    await Promise.all(admins.map(async (admin) => {
-      const existingNotification = await Notification.findOne({
-        reviewText: content,
-        createdBy,
-        image, // Ensure the user's image is passed here
-        sentTo: admin._id,
-        read: false
-      }).exec();
-
-      if (!existingNotification) {
-        await new Notification({
-          reviewText: content,
-          createdBy,
-          image, // Ensure the user's image is passed here
+          image,
           sentTo: admin._id,
           read: false
         }).save();
