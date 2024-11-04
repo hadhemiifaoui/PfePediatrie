@@ -6,9 +6,18 @@ import Title from '../../title/title';
 
 import vaccinservices from '../../../services/vaccinServices';
 
-const StyledTextField = styled(TextField)({
-  borderRadius: '6px',
-  width: '100%',
+
+const ButtonStyled = styled(Button)({
+  backgroundColor: '#00bcd4',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '75px',
+  '&:hover': {
+    backgroundColor: '#00acc1',
+  },
 });
 
 const EditForm = ({ initialValues }) => {
@@ -56,14 +65,15 @@ const EditForm = ({ initialValues }) => {
 
   return (
     <Container style={{ marginTop: '0px', maxWidth: '1200px' }}>
-      <h4 style={{ marginBottom: '20px' }}><Title>Edit Vaccination</Title></h4>
+      <h4 style={{ marginBottom: '20px' }}><Title>Modifier Vaccination</Title></h4>
       <Form onSubmit={handleSubmit}>
         <Row className="mb-2 align-items-center">
-          <Col md={2}><InputLabel shrink>Vaccinated For</InputLabel></Col>
+          <Col md={2}><InputLabel shrink>Vacciné Pour</InputLabel></Col>
           <Col md={10}>
-            <StyledTextField
+            <TextField
               id="vaccinatedFor"
               variant="standard"
+              style={{width:'80%'}}
               value={formData.vaccinatedFor}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
@@ -71,10 +81,11 @@ const EditForm = ({ initialValues }) => {
           </Col>
         </Row>
         <Row className="mb-2 align-items-center">
-          <Col md={2}><InputLabel shrink>Cought On</InputLabel></Col>
+          <Col md={2}><InputLabel shrink>Décrit le</InputLabel></Col>
           <Col md={10}>
-            <StyledTextField
+            <TextField
              type="date"
+             style={{width:'40%'}}
               id="CaughtOn"
               variant="standard"
               value={formData.CaughtOn}
@@ -84,23 +95,26 @@ const EditForm = ({ initialValues }) => {
           </Col>
         </Row>
         <Row className="mb-2 align-items-center">
-          <Col md={2}><InputLabel shrink>vaccination Name</InputLabel></Col>
-          <Col md={4}>
+          <Col md={2}><InputLabel shrink>Nom</InputLabel></Col>
+          <Col md={10}>
             <FormControl fullWidth variant="standard">
-              <StyledTextField
+              <TextField
                 id="vaccinName"
                 name="vaccinName"
+                style={{width:'80%'}}
                 value={formData.vaccinName}
                 onChange={handleChange}
                 variant="standard"
               />
             </FormControl>
           </Col>
-          <Col md={2}><InputLabel shrink>Details</InputLabel></Col>
-          <Col md={4}>
-            <StyledTextField
+          </Row>
+          <Row>
+          <Col md={2}><InputLabel shrink>Détails</InputLabel></Col>
+          <Col md={10}>
+            <TextField
               id="Details"
-              name="Details"
+              name="Details"  style={{width:'80%'}}
               variant="standard"
               value={formData.Details}
               onChange={handleChange}
@@ -110,22 +124,24 @@ const EditForm = ({ initialValues }) => {
         </Row>
         <Row className="mb-2 align-items-center">
           <Col md={2}><InputLabel shrink>Notes</InputLabel></Col>
-          <Col md={2}>
-            <StyledTextField
+          <Col md={10}>
+            <TextField
               id="notes"
               name="notes"
-              variant="standard"
+              variant="standard"  style={{width:'80%'}}
               value={formData.notes}
               onChange={handleChange}
+              multiline
+              rows={2}
               InputLabelProps={{ shrink: true }}
             />
           </Col>
         </Row>
     
         <div className="d-flex justify-content-end">
-          <Button variant="primary" type="submit">
-            Update
-          </Button>
+          <ButtonStyled variant="primary" type="submit">
+            Modifier
+          </ButtonStyled>
         </div>
       </Form>
       <Snackbar

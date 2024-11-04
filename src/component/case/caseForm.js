@@ -1,10 +1,37 @@
 import React, { useState, useContext } from 'react';
-import { TextField, Button, Grid, Container, MenuItem, Snackbar  ,  Select,
+import { TextField, Button, Grid, Container, MenuItem, Snackbar ,styled ,  Select,
    InputLabel,} from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import CaseContext from '../../context/CaseContext';
 
-const CaseForm = ({ onClose }) => {
+const ButtonStyled = styled(Button)({
+  backgroundColor: '#00bcd4',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '5px 10px',
+  fontSize: '10px',
+  minHeight: '35px',
+  width: '100px',
+  alignSelf: 'center',
+  '&:hover': {
+    backgroundColor: '#00acc1',
+  },
+});
+
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '100px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+const CaseForm = ({ onClose , refresh }) => {
   const [title, setTitle] = useState('');
   const [dateOpened, setDateOpened] = useState('');
   const [status, setStatus] = useState('Fermé');
@@ -39,7 +66,7 @@ const CaseForm = ({ onClose }) => {
       setSnackbarMessage('Cas Clinique Ajouté avec Succé!!');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
-
+      refresh();
       setTitle('');
       setDateOpened('');
       setStatus('Fermé');
@@ -193,17 +220,12 @@ const CaseForm = ({ onClose }) => {
           </Grid>
       
           <Grid item xs={12}>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                bgcolor: '#B3E5FC',
-                '&:hover': { bgcolor: '#81D4FA' },
-                minHeight: 'unset',
-              }} style={{marginLeft:"90%"}}
-            >
-              Ajouter
-            </Button>
+          <div style={{ marginTop: '10%' , marginLeft:'73%' }}>
+        <CancelButtonStyled  onClick={onClose}>Annuler</CancelButtonStyled>
+        <ButtonStyled type="submit" >
+          Ajouter
+        </ButtonStyled>
+      </div>
           </Grid>
         </Grid>
       </form>

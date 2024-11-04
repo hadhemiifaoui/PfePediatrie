@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import casesServices from '../../services/casesServices';
 import treatementservices from '../../services/treatementServices';
+import EditTreatmentForm from './editTreatementForm';
+import CloseIcon from '@mui/icons-material/Close';
+
 import { 
   Container, FormControl, Box, InputLabel, Select, MenuItem, Table, 
   IconButton, TableBody, TableCell, Typography , Grid, TableContainer, TableHead, TableRow, Paper,
@@ -27,6 +30,11 @@ const Treatments = () => {
   const [cases, setCases] = useState([]);
   const [selectedCaseId, setSelectedCaseId] = useState('');
   const [openAddDialog, setOpenAddDialog] = useState(false);
+
+  const [selectedTreatement, setSelectedTreatement] = useState(null);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+
+
   const [treatmentToDelete, setTreatmentToDelete] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -53,6 +61,26 @@ const Treatments = () => {
       if (selectedCaseId) {
         try {
           const response = await casesServices.viewTreatments(selectedCaseId);
+          if (userRole === 'pediatre') {
+            setTreatments(response.filter(treatment => treatment.status === 'confirmé')); //pediatre yshouf just el confirmed
+          } else {
+            setTreatments(response);  //l'admin ychouf lkool
+          }
+          console.log(response);
+        } catch (err) {
+          console.error(err);
+          setTreatments([]);
+        }
+      }
+    };
+    fetchTreatments();
+  }, [selectedCaseId]);
+
+  useEffect(() => {
+    const fetchTreatments = async () => {
+      if (selectedCaseId) {
+        try {
+          const response = await casesServices.viewTreatments(selectedCaseId);
           setTreatments(response);
           console.log(response);
         } catch (err) {
@@ -62,7 +90,7 @@ const Treatments = () => {
       }
     };
     fetchTreatments();
-  }, [selectedCaseId, refresh]);
+  }, [refresh]);
 
   const handleOpenDeleteDialog = (treatment) => {
     setTreatmentToDelete(treatment);
@@ -79,7 +107,7 @@ const Treatments = () => {
     try {
       await treatementservices.deleteTreatement(treatmentToDelete._id);
       setTreatments(treatments.filter(t => t._id !== treatmentToDelete._id));
-      setSuccessMessage('Traitement supprimé avec succès !!');
+      setSuccessMessage('Traitement supprimé avec succès!');
       setOpenSnackbar(true);
       handleCloseDeleteDialog();
     } catch (error) {
@@ -89,6 +117,20 @@ const Treatments = () => {
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
+  };
+
+   const handleCloseAddDiag = () => {
+    setOpenAddDialog(false)
+   }
+
+  const handleOpenEditDialog = (treatement) => {
+    setSelectedTreatement(treatement);
+    setOpenEditDialog(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setSelectedTreatement(null);
+    setOpenEditDialog(false);
   };
 
   return (
@@ -137,7 +179,7 @@ const Treatments = () => {
             </Select>
           </FormControl>
         )}
-        {userRole === 'admin' && (
+        {(userRole === 'admin' || userRole === 'pediatre') && (
           <div style={{ marginLeft: '15%' }}>
             <IconButton onClick={() => setOpenAddDialog(true)}>
               <AddCircleOutlineIcon style={{ color: '#89CFF0', fontSize: '25px' }} />
@@ -147,15 +189,20 @@ const Treatments = () => {
       </Box>
 
       <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
+        <Table> 
+          <TableHead>  
             <TableRow sx={{ backgroundColor: "#f8f9f9" }}>
-              <TableCell><strong>Hospitalisation</strong></TableCell>
-              <TableCell><strong>CardioRespiratoire</strong></TableCell>
+        
               <TableCell><strong>Maintien Température</strong></TableCell> 
               <TableCell><strong>Medications</strong></TableCell>
               <TableCell><strong>Suivi</strong></TableCell>
               <TableCell><strong>Restrictions Alimentaires</strong></TableCell>
+              <TableCell><strong>Hospitalisation</strong></TableCell>
+              <TableCell><strong>CardioRespiratoire</strong></TableCell>
+              <TableCell><strong>Support Psycologique</strong></TableCell>
+              <TableCell><strong>Notes </strong></TableCell>
+              <TableCell><strong>Ajouté par</strong></TableCell>
+              <TableCell><strong>Statut</strong></TableCell>
               {userRole === 'admin' && (
                 <TableCell colSpan={2}><strong>Actions</strong></TableCell>
               )}
@@ -165,28 +212,35 @@ const Treatments = () => {
             {treatments.length > 0 ? (
               treatments.map(treatment => (
                 <TableRow key={treatment._id}>
-                  <TableCell><Checkbox checked={treatment.hospitalisation} disabled /></TableCell>
-                  <TableCell><Checkbox checked={treatment.monitorageCardioRespiratoire} disabled /></TableCell>
+                 
+
                   <TableCell>{treatment.maintienTemperature}</TableCell>
                   <TableCell>   
                       
                   {treatment.medications.length > 0 ? (
-    treatment.medications.map((med, index) => (
-        <div key={index}>
-            {med.medicament ? med.medicament.nom : 'Nom indisponible'} - {med.dosage} - {med.frequency}
-        </div>
-    ))
-) : (
-    'Aucune médication disponible'
-)}
-</TableCell>
+                   treatment.medications.map((med, index) => (
+                  <div key={index}>
+                    {med.medicament ? med.medicament.nom : 'Nom indisponible'}
+                    - {med.dosage} - {med.frequency}  - {med.duration}
+                  </div>
+                   ))
+                 ) : (
+                    'Aucune médication disponible'
+                )}
+             </TableCell>
                   <TableCell>{treatment.followUpInstructions}</TableCell>
                   <TableCell>{treatment.dietaryRestrictions}</TableCell>
+                  <TableCell><Checkbox checked={treatment.hospitalisation} disabled /></TableCell>
+                  <TableCell><Checkbox checked={treatment.monitorageCardioRespiratoire} disabled /></TableCell>
+                  <TableCell><Checkbox checked={treatment.psychologicalSupport} disabled /></TableCell>
+                  <TableCell>{treatment.additionalNotes}</TableCell>
+                   <TableCell> Dr {treatment.createdBy ? treatment.createdBy.firstname : 'Inconnue'}</TableCell> 
+                   <TableCell>{treatment.status}</TableCell>
                   {userRole === 'admin' && (
                     <>
                       <TableCell>
                         <IconButton color="success">
-                          <PencilSquare />
+                          <PencilSquare  onClick={() => handleOpenEditDialog(treatment)}/>
                         </IconButton>
                       </TableCell>
                       <TableCell>
@@ -223,17 +277,27 @@ const Treatments = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openAddDialog} onClose={() => setOpenAddDialog(false)}>
-        <DialogTitle>Ajouter un Traitement</DialogTitle>
+      <Dialog open={openAddDialog} onClose={handleCloseAddDiag} maxWidth="md" fullWidth>
+        <DialogTitle><Title>Ajouter un Traitement</Title></DialogTitle>
         <DialogContent>
-          <AddTreatmentForm caseId={selectedCaseId} refresh={() => setRefresh(!refresh)} />
+          <AddTreatmentForm caseId={selectedCaseId} refresh={() => setRefresh(!refresh)} 
+          handleCloseAddDiag={handleCloseAddDiag} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenAddDialog(false)} color="primary">
-            Annuler
-          </Button>
+        
         </DialogActions>
       </Dialog>
+
+      <Dialog open={openEditDialog} onClose={handleCloseEditDialog} maxWidth="md" fullWidth>
+        <DialogTitle><Title>Modifier le traitement</Title></DialogTitle>
+        <DialogContent>
+          <EditTreatmentForm treatement={selectedTreatement} caseId={selectedCaseId} handleCloseEditDialog={handleCloseEditDialog} 
+           refresh={() => setRefresh(!refresh)}/>
+        </DialogContent>
+        <DialogActions>
+        </DialogActions>
+      </Dialog>
+
 
       <Snackbar
         open={openSnackbar}

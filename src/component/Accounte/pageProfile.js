@@ -34,50 +34,32 @@ const PedAccountePage = () => {
             activeItem={selectedItem}
           />
           <Box component="main" sx={{ flexGrow: 1, p: 3, marginLeft: '258px' }}>
-            {selectedItem === 'profile' ? (
-              <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
-                <Grid item xs={12} md={8} lg={6}>
-                  <Accounte />
-                </Grid>
-              </Grid>
-            ) : selectedItem === 'parametre' ? (
+             {selectedItem === 'parametre' ? (
               <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                 <Grid item xs={12} md={8} lg={6}>
                   <Parametre />
                 </Grid>
               </Grid>
-            ) : selectedItem === 'settings' ? ( // Add settings option
+            ) : selectedItem === 'settings' ? (
               <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                 <Grid item xs={12} md={8} lg={6}>
                   <Settings />
                 </Grid>
               </Grid>
-            ) : selectedItem === 'enfants' ? ( // Add Enfant option
+            ) : selectedItem === 'enfants' ? ( 
               <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                 <Grid item xs={12} md={8} lg={6}>
                   <Enfant />
                 </Grid>
               </Grid>
             ) : (
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                  backgroundColor: '#f5f5f5',
-                  textAlign: 'center',
-                }}
-              >
-                <img
-                  src={image}
-                  alt="Home"
-                  style={{ width: "100%", height: "100%", objectFit: 'cover', marginLeft: -10 }}
-                />
-                <Typography variant="h8" sx={{ position: 'absolute', bottom: 20, color: '#333' }}>
-                  <small><em>Bienvenue Au Compte Pédiatre </em></small>
-                </Typography>
-              </Box>
+             
+                 <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
+                <Grid item xs={12} md={8} lg={6}>
+                  <Accounte />
+                </Grid>
+              </Grid>
+           
             )}
           </Box>
         </Box>
@@ -87,3 +69,24 @@ const PedAccountePage = () => {
 };
 
 export default PedAccountePage;
+
+
+/*
+       {selectedItem === 'profile' ? (
+              <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
+                <Grid item xs={12} md={8} lg={6}>
+                  <Accounte />
+                </Grid>
+              </Grid>
+            ) :
+
+
+
+<img
+                  src={image}
+                  alt="Home"
+                  style={{ width: "100%", height: "100%", objectFit: 'cover', marginLeft: -10 }}
+                />
+                <Typography variant="h8" sx={{ position: 'absolute', bottom: 20, color: '#333' }}>
+                  <small><em>Bienvenue Au Compte Pédiatre </em></small>
+                </Typography>*/

@@ -8,9 +8,9 @@ import Button from '@mui/material/Button';
 import diagnosticservices from '../../services/diagnoticServices';
 import Title from '../title/title';
 import { styled, MenuItem, IconButton, Snackbar } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+//import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
-
+import { Row, Col } from 'react-bootstrap';
 const ButtonStyled = styled(Button)({
   backgroundColor: '#00bcd4',
   color: '#fff',
@@ -25,7 +25,22 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const EditDiagnosticForm = ({ open, onClose, diagnostic, onUpdate }) => {
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '12px',
+  minHeight: '15px',
+
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+
+
+const EditDiagnosticForm = ({ open, onClose, diagnostic, onUpdate , refresh}) => {
   const [editedDiagnostic, setEditedDiagnostic] = useState({ ...diagnostic });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -41,12 +56,17 @@ const EditDiagnosticForm = ({ open, onClose, diagnostic, onUpdate }) => {
       await diagnosticservices.updateDiagnostic(editedDiagnostic._id, editedDiagnostic);
       onUpdate(editedDiagnostic);
       setSuccessMessage('Diagnostique Mis a Jour Avec Succé');
+      refresh();
       setOpenSnackbar(true);
     } catch (err) {
       setError('Failed to update diagnostic. Please try again.');
       console.error('Failed to update diagnostic', err);
     }
   };
+
+  const handleCancel = () =>{
+    onClose();
+  }
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
@@ -89,7 +109,7 @@ const EditDiagnosticForm = ({ open, onClose, diagnostic, onUpdate }) => {
           value={editedDiagnostic.description}
           onChange={handleChange}
         />
-        <TextField
+      <TextField
           label="Plan du traitement"
           fullWidth
           margin="normal"
@@ -114,15 +134,37 @@ const EditDiagnosticForm = ({ open, onClose, diagnostic, onUpdate }) => {
           <MenuItem value="Moyenne">Moyenne</MenuItem>
           <MenuItem value="Fort">Fort</MenuItem>
         </TextField>
-        <ButtonStyled onClick={handleSave} color="primary" style={{ marginLeft: '85%' }}>
-          Modifier
-        </ButtonStyled>
+      
+       <TextField
+          label="status"
+          variant="standard"
+          style={{ width: 200 , marginLeft: '20%'}}
+          margin="normal"
+          select
+          name="status"
+          value={editedDiagnostic.status}
+          onChange={handleChange}
+        >
+          
+              <MenuItem value="confirmé">Actif</MenuItem>
+              <MenuItem value="rejeté">Inactif</MenuItem>
+              <MenuItem value="en attente">En attente</MenuItem>
+              </TextField>
+          
+
+              <Row>
+              <Col xs={4} style={{ marginLeft: '68%' , marginTop:'4%' }}>
+                <CancelButtonStyled onClick={handleCancel} color="primary" style={{width:100,height:32}}>
+                      Annuler
+                </CancelButtonStyled>            
+                <ButtonStyled onClick={handleSave} color="primary" style={{ width:100 }}>
+                     Modifier
+               </ButtonStyled>
+            </Col></Row>
        
       </DialogContent>
       <DialogActions>
-        <IconButton color="primary" aria-label="close" onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
+       
       </DialogActions>
 
       <Snackbar
@@ -141,3 +183,15 @@ const EditDiagnosticForm = ({ open, onClose, diagnostic, onUpdate }) => {
 };
 
 export default EditDiagnosticForm;
+
+  /* <TextField
+          label="Plan du traitement"
+          fullWidth
+          margin="normal"
+          variant="standard"
+          name="treatmentPlan"
+          value={editedDiagnostic.treatmentPlan}
+          onChange={handleChange}
+          multiline
+          rows={4}
+        />*/

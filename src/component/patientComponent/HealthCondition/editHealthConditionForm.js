@@ -22,21 +22,6 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const CancelButtonStyled = styled(Button)({
-  backgroundColor: '#f44336',
-  color: '#fff',
-  marginTop: '15px',
-  padding: '8px',
-  fontSize: '10px',
-  minHeight: '15px',
-  width: '75px',
-  marginRight: '10px',
-  '&:hover': {
-    backgroundColor: '#d32f2f',
-  },
-});
-
-
 
 const EditForm = ({ initialData }) => {
   const [formData, setFormData] = useState({
@@ -188,6 +173,7 @@ const EditForm = ({ initialData }) => {
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
+          <Row>
           <Col xs={2}><InputLabel shrink>Statut</InputLabel></Col>
           <Col xs={4}>
             <Select
@@ -202,6 +188,8 @@ const EditForm = ({ initialData }) => {
               <MenuItem value="past"><em>Pasé</em></MenuItem>
             </Select>
           </Col>
+          </Row>
+          <Row>
           <Col xs={2}><InputLabel shrink>Treaté Par</InputLabel></Col>
           <Col xs={4}>
             <TextField
@@ -214,6 +202,7 @@ const EditForm = ({ initialData }) => {
               style={{ backgroundColor: '#fff' }}
             />
           </Col>
+          </Row>
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={2}><InputLabel shrink>Medicaments</InputLabel></Col>
@@ -251,9 +240,8 @@ const EditForm = ({ initialData }) => {
         <Row className="mt-4">
           <Col md={8} />
           <Col md={4} className="d-flex justify-content-end">
-            <CancelButtonStyled variant="contained">Annuler</CancelButtonStyled>
             <ButtonStyled type="submit" variant="contained">
-               Sauvegarder
+               Enregister
             </ButtonStyled>
           </Col>
         </Row>

@@ -4,12 +4,14 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReorderIcon from '@mui/icons-material/Reorder';
-import { useAuth } from './AuthContext'; 
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+
+//import { useAuth } from './AuthContext'; 
 
 const Navbar1 = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { userRole } = useAuth();
+ // const { userRole } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElDashboard, setAnchorElDashboard] = React.useState(null);
 
@@ -30,11 +32,6 @@ const Navbar1 = () => {
   const handleCloseLanguageMenu = () => {
     setAnchorEl(null);
   };
-
-  const handleDashboardClick = (event) => {
-    setAnchorElDashboard(event.currentTarget);
-  };
-
   const handleDashboardChange = (path) => {
     navigate(path);
     setAnchorElDashboard(null);
@@ -56,21 +53,17 @@ const Navbar1 = () => {
         </Box>
         <IconButton onClick={handleClick} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize: 17 }}>
-            Home
+            {t('home')}
           </Typography>
         </IconButton>
-        <IconButton sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize: 17 }}>
-            About
-          </Typography>
-        </IconButton>
-        {userRole === 'pediatre' && (
-          <IconButton sx={{ flexDirection: 'column', alignItems: 'flex-start' }} onClick={handleDashboardClick}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize: 17 }}>
-              Dashboard
-            </Typography>
-          </IconButton>
-        )}
+        <IconButton
+             sx={{ color: '#fff' }}
+              onClick={() => {
+                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=aidepediatrique@gmail.com&su=Support Request&body=Bonjour, jai besoin d`assistance', '_blank');
+              }}
+            >
+              <MailOutlineIcon />
+            </IconButton>
         <Menu
           anchorEl={anchorElDashboard}
           keepMounted
@@ -99,3 +92,24 @@ const Navbar1 = () => {
 };
 
 export default Navbar1;
+
+
+/*
+ 
+  const handleDashboardClick = (event) => {
+    setAnchorElDashboard(event.currentTarget);
+  };
+       <IconButton sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize: 17 }}>
+            About
+          </Typography>
+        </IconButton>
+
+{userRole === 'pediatre' && (
+  <IconButton sx={{ flexDirection: 'column', alignItems: 'flex-start' }} onClick={handleDashboardClick}>
+    <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize: 17 }}>
+      Dashboard
+    </Typography>
+  </IconButton>
+)}
+*/

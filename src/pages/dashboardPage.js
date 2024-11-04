@@ -12,7 +12,8 @@ import ViewUsers from '../component/utilisateurs/viewUsers';
 import Tests from '../component/Tests/viewTests'
 import Treatments from '../component/Traitement/treatementList'
 import Parametre from '../component/Parameter/parameter';
-
+import AddReviewForm from '../component/Review/addReview';
+import NotificationList from '../component/Notification/notification'
 function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState('home');
@@ -57,8 +58,9 @@ function AdminDashboard() {
         {selectedItem === 'secteur' && <SecteurList />}
         {selectedItem === 'treatement' && <Treatments />}
         {selectedItem === 'utilisateurs' && <ViewUsers />}
-        {selectedItem === 'setting' && <Parametre />}
-
+        {selectedItem === 'feedback' && <AddReviewForm />}
+        {selectedItem === 'Backups' && <Parametre />}
+        {selectedItem === 'notification' && <NotificationList />}
         {selectedItem === 'home' && <Home />}
       </main>
     </div>

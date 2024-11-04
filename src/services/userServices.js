@@ -48,6 +48,17 @@ const userServices  = {
         console.error(err)
     }
   } ,
+
+  toggleUserActive: async (userIds, isActive) => {
+    try {
+      const response = await axios.patch(`${userServices.baseURL}/toggleActive`,{ userIds: userIds,  // Ensure this is an array
+        isActive: isActive, },getAuthHeaders());
+      return response.data;
+    } catch (err) {
+      console.error('Error toggling user activation status:', err);
+      throw err; 
+    }
+  },
   getUsersByRole: async (role) => {
     try {
       const response = await axios.get(`${userServices.baseURL}/byrole/${role}` , getAuthHeaders());
@@ -94,62 +105,7 @@ const userServices  = {
     }
   },
 
-
-  sendTwoFactorCode: async (email) => {
-    try {
-      const response = await axios.post(`${userServices.baseURL}/send-two-factor-code`, { email } , getAuthHeaders());
-      return response.data;
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  verifyTwoFactorCode: async (email, twoFactorCode) => {
-    try {
-      const response = await axios.post(`${userServices.baseURL}/verify-two-factor-code`, { email, twoFactorCode } , getAuthHeaders());
-      return response.data;
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  requestPasswordReset: async (email) => {
-    try {
-      const response = await axios.post(`${userServices.baseURL}/request-password-reset`, { email } , getAuthHeaders());
-      return response.data;
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  resetPassword: async (token, password) => {
-    try {
-      const response = await axios.post(`${userServices.baseURL}/reset/${token}`, { password } , getAuthHeaders());
-      return response.data;
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  changePassword: async (email, currentPassword, newPassword) => {
-    try {
-      const response = await axios.post(`${userServices.baseURL}/change-password`, { email, currentPassword, newPassword } , getAuthHeaders());
-      return response.data;
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  deleteAccount: async (email) => {
-    try {
-      const response = await axios.delete(`${userServices.baseURL}/delete-account`, { data: { email }, ...getAuthHeaders() });
-      return response.data;
-    } catch (err) {
-      console.error(err);
-    }
-  }
-,
-   getChildernUnderPedAssistance : async(id) =>{
+  getChildernUnderPedAssistance : async(id) =>{
     try{
         const response = await axios.get(`http://localhost:3001/users/pediatre/${id}/children` , getAuthHeaders());
         return response.data;
@@ -178,6 +134,32 @@ changePassword: async (passwordData) => {
   }
 },
 
+};
+
+
+export default userServices;
+
+
+/*
+ sendTwoFactorCode: async (email) => {
+    try {
+      const response = await axios.post(`${userServices.baseURL}/send-two-factor-code`, { email } , getAuthHeaders());
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  verifyTwoFactorCode: async (email, twoFactorCode) => {
+    try {
+      const response = await axios.post(`${userServices.baseURL}/verify-two-factor-code`, { email, twoFactorCode } , getAuthHeaders());
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  
 deleteAccounteconst: async () => {
   try {
     const response = await axios.delete(`${userServices.baseURL}/deleteAccount`, getAuthHeaders());
@@ -187,8 +169,39 @@ deleteAccounteconst: async () => {
     return { success: false, message: 'Error deleting account' };
   }
 }
-};
 
+  changePassword: async (email, currentPassword, newPassword) => {
+    try {
+      const response = await axios.post(`${userServices.baseURL}/change-password`, { email, currentPassword, newPassword } , getAuthHeaders());
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  requestPasswordReset: async (email) => {
+    try {
+      const response = await axios.post(`${userServices.baseURL}/request-password-reset`, { email } , getAuthHeaders());
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  },
 
-export default userServices;
+  resetPassword: async (token, password) => {
+    try {
+      const response = await axios.post(`${userServices.baseURL}/reset/${token}`, { password } , getAuthHeaders());
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  },
 
+  deleteAccount: async (email) => {
+    try {
+      const response = await axios.delete(`${userServices.baseURL}/delete-account`, { data: { email }, ...getAuthHeaders() });
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  */

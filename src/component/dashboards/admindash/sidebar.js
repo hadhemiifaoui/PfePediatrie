@@ -1,64 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react'; //, { useState, useEffect }
 import '../../../appearence/show.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStethoscope, faHeartbeat, faThermometerHalf, faHospital,  faVial, 
-      faPills, faUsers, faCog, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope, faHeartbeat, faThermometerHalf, faHospital, faVial, 
+      faPills, faUsers, faCog, faHome, faPaperPlane } from '@fortawesome/free-solid-svg-icons'; 
 
 import { useAuth } from '../../authentification/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { ListItem, Avatar, Typography, Box, IconButton, TextField, Button } from '@mui/material';
-import { Edit, CameraAlt } from '@mui/icons-material';
-import userServices from '../../../services/userServices';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
+//import userServices from '../../../services/userServices';
 
 function Sidebar({ openSidebarToggle, handleItemClick, activeItem }) {
   const { t } = useTranslation();
-  const { userRole, user, setUser } = useAuth();
-  const [formData, setFormData] = useState({ image: null, speciality: '' });
-  const [editMode, setEditMode] = useState(false);
-  const id = localStorage.getItem('userid');
+  const { userRole } = useAuth();
+// const [formData, setFormData] = useState({ image: null, speciality: '' });
+  //const [editMode, setEditMode] = useState(false);
+  //const id = localStorage.getItem('userid');  , user, setUser
 
   const iconStyle = {
     color: '#ffffff',
     fontSize: '20px',
-    marginRight: '4px' 
-  };
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await userServices.getUserById(id);
-        setUser(response);
-        setFormData({ speciality: response.speciality || '' });
-      } catch (error) {
-        console.error('Error Getting User !!', error);
-      }
-    };
-    getUser();
-  }, [id]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = new FormData();
-    if (formData.image) form.append('image', formData.image);
-    form.append('speciality', formData.speciality);
-
-    try {
-      await userServices.createProfile(id, form);
-      const updatedUser = await userServices.getUserById(id);
-      setUser(updatedUser);
-      setEditMode(false); 
-    } catch (error) {
-      console.error('Error Creating Profile !!', error);
-    }
+    padding: '0px',
+    marginRight: '4px', 
   };
 
   return (
@@ -67,7 +30,6 @@ function Sidebar({ openSidebarToggle, handleItemClick, activeItem }) {
         <div className='sidebar-brand'></div>
       </div>
      
-
       <ul className='sidebar-list' style={{ padding: 0, margin: 0 }}>
         <li className={`sidebar-list-item ${activeItem === 'home' ? 'active' : ''}`} style={{ marginBottom: '4px' }}>
           <a
@@ -98,8 +60,8 @@ function Sidebar({ openSidebarToggle, handleItemClick, activeItem }) {
               color: activeItem === 'diagnostic' ? '#ffffff' : '#ffffff',
             }}
             onClick={() => handleItemClick('diagnostic')}
-          >
-            <FontAwesomeIcon icon={faStethoscope} size="lg" style={iconStyle} /> {t('diagnostics')}
+          >                                         
+            <FontAwesomeIcon icon={faStethoscope} size="lg" style={iconStyle} /> Diagnostics
           </a>
         </li>
         <li className={`sidebar-list-item ${activeItem === 'symptoms' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
@@ -124,18 +86,30 @@ function Sidebar({ openSidebarToggle, handleItemClick, activeItem }) {
             <FontAwesomeIcon icon={faVial} style={iconStyle} /> {t('tests')}
           </a>
         </li> 
-       <li className={`sidebar-list-item ${activeItem === 'treatement' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
-            <a
-              style={{
-                fontWeight: activeItem === 'treatement' ? 'bold' : 'normal',
-                color: activeItem === 'treatement' ? '#ffffff' : '#ffffff',
-              }}
-              onClick={() => handleItemClick('treatement')}
-            >
+        <li className={`sidebar-list-item ${activeItem === 'treatement' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
+          <a
+            style={{
+              fontWeight: activeItem === 'treatement' ? 'bold' : 'normal',
+              color: activeItem === 'treatement' ? '#ffffff' : '#ffffff',
+            }}
+            onClick={() => handleItemClick('treatement')}
+          >
             <FontAwesomeIcon icon={faPills} style={iconStyle} /> Traitements 
-      
-       </a>
-       </li>
+          </a>
+        </li>
+
+        {userRole === 'pediatre' && (
+        <li className={`sidebar-list-item ${activeItem === 'feedback' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
+          <a
+            style={{
+              fontWeight: activeItem === 'feedback' ? 'bold' : 'normal',
+              color: activeItem === 'feedback' ? '#ffffff' : '#ffffff',
+            }}
+            onClick={() => handleItemClick('feedback')}
+          >
+            <FontAwesomeIcon icon={faPaperPlane} style={iconStyle} /> {t('Feedback')}
+          </a>
+        </li>)}
 
         {userRole === 'admin' && (
           <li className={`sidebar-list-item ${activeItem === 'secteur' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
@@ -163,23 +137,83 @@ function Sidebar({ openSidebarToggle, handleItemClick, activeItem }) {
             </a>
           </li>
         )}
-        <li className={`sidebar-list-item ${activeItem === 'setting' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
-          <a
-            style={{
-              fontWeight: activeItem === 'setting' ? 'bold' : 'normal',
-              color: activeItem === 'setting' ? '#ffffff' : '#ffffff',
-            }}
-            onClick={() => handleItemClick('setting')}
-          >
-            <FontAwesomeIcon icon={faCog} style={iconStyle} /> {t('setting')}
-          </a>
-        </li>
+       {userRole === 'admin' && (
+          <li className={`sidebar-list-item ${activeItem === 'notification' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
+            <a
+              style={{
+                fontWeight: activeItem === 'notification' ? 'bold' : 'normal',
+                color: activeItem === 'notification' ? '#ffffff' : '#ffffff',
+              }}
+              onClick={() => handleItemClick('notification')}
+            >
+              <NotificationsIcon icon={faCog} style={iconStyle} /> {t('Notifications')}
+            </a>
+          </li>
+        )} 
+        {userRole === 'admin' && (
+          <li className={`sidebar-list-item ${activeItem === 'setting' ? 'active' : ''}`} style={{ marginBottom: '0px' }}>
+            <a
+              style={{
+                fontWeight: activeItem === 'setting' ? 'bold' : 'normal',
+                color: activeItem === 'setting' ? '#ffffff' : '#ffffff',
+              }}
+              onClick={() => handleItemClick('Backups')}
+            >
+              <FontAwesomeIcon icon={faCog} style={iconStyle} /> {t('Backups')}
+            </a>
+          </li>
+        )} 
       </ul>
     </aside>
   );
 }
 
 export default Sidebar;
+
+
+
+
+
+
+
+/*  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await userServices.getUserById(id);
+        setUser(response);
+        setFormData({ speciality: response.speciality || '' });
+      } catch (error) {
+        console.error('Error Getting User !!', error);
+      }
+    };
+    getUser();
+  }, [id]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
+  };*/
+
+  /*const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    if (formData.image) form.append('image', formData.image);
+    form.append('speciality', formData.speciality);
+
+    try {
+      await userServices.createProfile(id, form);
+      const updatedUser = await userServices.getUserById(id);
+      setUser(updatedUser);
+      setEditMode(false); 
+    } catch (error) {
+      console.error('Error Creating Profile !!', error);
+    }
+  };
+*/
 
 
 /* <ListItem button sx={{ justifyContent: 'center', marginBottom: 2 , marginLeft:1 }}>

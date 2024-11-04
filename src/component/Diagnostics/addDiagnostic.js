@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Snackbar,FormControl ,
     InputLabel , Select , MenuItem,
-   FormControlLabel,styled , Checkbox } from '@mui/material';
+   styled  } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import casesServices from '../../services/casesServices';
-import {Row} from 'react-bootstrap'
+import {Row , Col} from 'react-bootstrap'
 
 
 const ButtonStyled = styled(Button)({
@@ -14,32 +14,44 @@ const ButtonStyled = styled(Button)({
   padding: '5px 10px',
   fontSize: '12px',
   minHeight: '30px',
-  width: '150px',
+ 
   alignSelf: 'center',
   '&:hover': {
     backgroundColor: '#00acc1',
   },
 });
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '12px',
+  minHeight: '15px',
 
-const AddDiagnosticForm = ({ caseId }) => {
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+const AddDiagnosticForm = ({handleClose, caseId , refresh}) => {
   const [factorRisks, setFactorRisks] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [dateDiagnosed, setDateDiagnosed] = useState('');
-  const [treatmentPlan, setTreatmentPlan] = useState('');
+  //const [treatmentPlan, setTreatmentPlan] = useState('');
   const [severity , setSeverity] =useState('')
-  const [confirmed, setConfirmed] = useState(false);
+ 
   const [formError, setFormError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  console.log('Received caseId:', caseId);
+  console.log('caseId:', caseId);
 
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!factorRisks.trim() || !name || !description || !dateDiagnosed || !treatmentPlan) {
-      setFormError('All fields are required');
+    if (!factorRisks.trim() || !name || !description || !dateDiagnosed ) {
+      setFormError('tous les champs sont requisent');
       return;
     }
 
@@ -50,30 +62,39 @@ const AddDiagnosticForm = ({ caseId }) => {
         description: description,
         dateDiagnosed: dateDiagnosed,
         severity : severity,
-        treatmentPlan: treatmentPlan,
-        confirmed: confirmed
+       // treatmentPlan: treatmentPlan,
+       // confirmed: confirmed
       };
 
       await casesServices.addDiagnostic(caseId, diagnosticData);
       console.log('hjhjhjhjhj')
+     
       setFactorRisks('');
       setName('');
       setDescription('');
       setDateDiagnosed('');
-      setTreatmentPlan('');
-      setConfirmed(false);
+     // setTreatmentPlan('');
+     // setConfirmed(false);
+
       setSeverity('')
       setFormError('');
       setSuccessMessage('Diagnostique Ajouté Avec Succé !!');
+     
       setOpenSnackbar(true);
+      refresh();
     } catch (error) {
-      console.error('Error adding diagnostic:', error);
+      console.error('error add new diag:', error);
       setFormError(error.response ? error.response.data.error : error.message);
     }
   };
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
+  };
+
+  
+  const handleCancel = () => {
+    handleClose();
   };
 
   return (
@@ -121,25 +142,14 @@ const AddDiagnosticForm = ({ caseId }) => {
         value={dateDiagnosed}
         onChange={(e) => setDateDiagnosed(e.target.value)}
         variant='standard'
-        style={{width:'50%'}}
+        style={{ width: 200 }}
         required
         margin="normal"
         InputLabelProps={{
           shrink: true,
         }}
       /></Row>
-      <Row>
-      <TextField
-        label="Plan de traitement"
-        name="treatmentPlan"
-        value={treatmentPlan}
-        onChange={(e) => setTreatmentPlan(e.target.value)}
-        variant='standard'
-        style={{width:'80%'}}
-        multiline
-        rows={4}
-        margin="normal"
-      /></Row>
+    
       <Row>
       <FormControl fullWidth>
         <InputLabel>Gravité</InputLabel>
@@ -156,26 +166,14 @@ const AddDiagnosticForm = ({ caseId }) => {
         </Select>
       </FormControl>
       </Row>
-      <Box mt={3}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={confirmed}
-              onChange={(e) => setConfirmed(e.target.checked)}
-              name="confirmed"
-              color="primary"
-            />
-          }
-          label="Confirmé"
-          margin="normal"
-        />
-      </Box>
+     
+      <Row>
+      <Col xs={4} style={{ marginLeft: '65%' , marginTop:'4%' }}>
+      <CancelButtonStyled onClick={handleCancel} style={{width:100,height:32}}>Annuler</CancelButtonStyled>
 
-
-
-      <ButtonStyled type="submit" variant="contained" color="primary" style={{width:100 , marginLeft:'90%' , marginTop:'0%'}}>
+      <ButtonStyled type="submit" variant="contained" color="primary" style={{width:100 }}>
           Ajouter
-      </ButtonStyled>
+      </ButtonStyled> </Col></Row>
     
       <Snackbar
         open={openSnackbar}
@@ -194,3 +192,30 @@ const AddDiagnosticForm = ({ caseId }) => {
 
 export default AddDiagnosticForm;
 
+/* <Box mt={3}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={confirmed}
+              onChange={(e) => setConfirmed(e.target.checked)}
+              name="confirmed"
+              color="primary"
+            />
+          }
+          label="Confirmé"
+          margin="normal"
+        />
+      </Box>*/
+
+       /*  <Row>
+      <TextField
+        label="Plan de traitement"
+        name="treatmentPlan"
+        value={treatmentPlan}
+        onChange={(e) => setTreatmentPlan(e.target.value)}
+        variant='standard'
+        style={{width:'80%'}}
+        multiline
+        rows={4}
+        margin="normal"
+      /></Row>*/

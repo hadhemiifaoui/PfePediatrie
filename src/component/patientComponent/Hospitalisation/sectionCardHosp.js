@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, IconButton, useTheme, Dialog, DialogContent } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, useTheme, Dialog, DialogContent, DialogActions } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import NewHospitalisationForm from './addHospitalisationForm';
 import Title from '../../title/title';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useAuth } from '../../authentification/AuthContext';
 
@@ -53,6 +54,11 @@ const SectionCard = ({ title, children }) => {
         <DialogContent>
           <NewHospitalisationForm onClose={handleClose} childId={childId} patientId={patientId} />
         </DialogContent>
+        <DialogActions>
+          <IconButton color="primary" aria-label="close" onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogActions>
       </Dialog>
     </Card>
   );

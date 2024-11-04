@@ -1,11 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import {
-  TextField, Button, Grid, FormControl, Container, InputLabel, Select, MenuItem, Snackbar,
+  TextField, Button, Grid, FormControl, Container, InputLabel, Select, MenuItem, Snackbar,styled
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import casesServices from '../../services/casesServices';
 
-const EditCaseForm = ({ caseItem, onClose }) => {
+const ButtonStyled = styled(Button)({
+  backgroundColor: '#00bcd4',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '5px 10px',
+  fontSize: '10px',
+  minHeight: '35px',
+  width: '100px',
+  alignSelf: 'center',
+  '&:hover': {
+    backgroundColor: '#00acc1',
+  },
+});
+
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '100px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+
+const EditCaseForm = ({ onClose ,caseItem, refresh }) => {
   const [formData, setFormData] = useState({
     title: '',
     status: '',
@@ -13,7 +41,7 @@ const EditCaseForm = ({ caseItem, onClose }) => {
     pediatricType: '',
     description: '',
     notes: '',
-    dateOpened: '', // make sure this is included
+    dateOpened: '', 
   });
 
   useEffect(() => {
@@ -25,7 +53,7 @@ const EditCaseForm = ({ caseItem, onClose }) => {
         pediatricType: caseItem.pediatricType || '',
         description: caseItem.description || '',
         notes: caseItem.notes || '',
-        dateOpened: caseItem.dateOpened || '', // ensure dateOpened is populated
+        dateOpened: caseItem.dateOpened || '', 
       });
     }
   }, [caseItem]);
@@ -48,6 +76,7 @@ const EditCaseForm = ({ caseItem, onClose }) => {
       await casesServices.update(caseItem._id, formData);
       setSuccessMessage('Cas clinique mis a jour avec succé');
       setOpenSnackbar(true);
+      refresh();
       setError('');
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -189,18 +218,12 @@ const EditCaseForm = ({ caseItem, onClose }) => {
             </Grid>
           )}
           <Grid item xs={12}>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                bgcolor: '#B3E5FC',
-                '&:hover': { bgcolor: '#81D4FA' },
-                minHeight: 'unset',
-              }}
-              style={{ marginLeft: '90%' }}
-            >
-              Modifier
-            </Button>
+          <div style={{ marginTop: '10%' , marginLeft:'73%' }}>
+        <CancelButtonStyled  onClick={onClose}>Annuler</CancelButtonStyled>
+        <ButtonStyled type="submit" >
+          Modifier
+        </ButtonStyled>
+      </div>
           </Grid>
         </Grid>
       </form>

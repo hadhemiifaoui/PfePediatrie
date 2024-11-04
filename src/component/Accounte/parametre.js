@@ -44,8 +44,7 @@ const ButtonStyledAnnul = styled(Button)({
 });
 
 const Settings = () => {
-  const [email, setEmail] = useState('');
-
+  
   const [editOpen, setEditOpen] = useState(false);
 
 
@@ -76,22 +75,7 @@ const Settings = () => {
     }
   });
 
-  
-
-
-  const handleDeleteAccount = async () => {
-    try {
-      await userServices.deleteAccount(email);
-      alert('Account deleted successfully');
-    } catch (error) {
-      console.error('Error deleting account:', error);
-    }
-  };
-
-  
-
-
-
+ 
   return (
     <Box p={3} style={{marginTop:-120 , marginLeft : -180 , widh:20}}>
       <Typography variant="h5" gutterBottom>

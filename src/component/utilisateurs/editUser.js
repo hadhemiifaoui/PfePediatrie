@@ -32,7 +32,7 @@ const ButtonStyled = styled(Button)({
     },
   });
 
-const EditUser = ({ initialData ,handleClose }) => {
+const EditUser = ({ initialData ,handleClose  , refresh}) => {
   const [formData, setFormData] = useState({
     firstname: initialData.firstname || '',
     lastname: initialData.lastname || '',
@@ -68,6 +68,7 @@ const EditUser = ({ initialData ,handleClose }) => {
       });
       setSuccessMessage('Utilisateur modifier avec succé !!');
       setOpenSnackbar(true);
+      refresh()
     } catch (error) {
       console.error('Error Updating User !!');
       setError('Error updating User');
@@ -144,7 +145,7 @@ const EditUser = ({ initialData ,handleClose }) => {
           <Col xs={10}>
             <TextField
               name="password"
-              type='password'
+              type="password"
               fullWidth
               value={formData.password}
               onChange={handleChange}

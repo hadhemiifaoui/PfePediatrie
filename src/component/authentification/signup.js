@@ -113,7 +113,7 @@ const Signup = () => {
       try {
         const response = await userServices.signUp({ firstname, lastname, email, password, birthday, role, tel });
         console.log(response.data);
-        setSuccessMessage('User registered successfully');
+        setSuccessMessage('Utilisateur inscrit avec succé');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
       
@@ -204,8 +204,8 @@ const Signup = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              label={t('DOBLabel')}
-              name="dob"
+              
+              type="date"
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
               fullWidth
@@ -222,7 +222,7 @@ const Signup = () => {
                 onChange={(e) => setRole(e.target.value)}
                 fullWidth
               >
-                <MenuItem value="admin">Admin</MenuItem>
+               
                 <MenuItem value="pediatre">Pediatre</MenuItem>
                 <MenuItem value="patient">Patient</MenuItem>
               </Select>
@@ -285,3 +285,6 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+// <MenuItem value="admin">Admin</MenuItem>

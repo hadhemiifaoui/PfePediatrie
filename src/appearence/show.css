@@ -67,7 +67,7 @@
 /* Sidebar  */
   
 #sidebar {
-  margin-top: 1%;
+  margin-top: 0%;
   grid-area: sidebar;
   width: 258px;
   position: fixed;
@@ -95,23 +95,25 @@
 }
 
 .sidebar-list {
+  
   padding: 0;
   list-style-type: none;
 }
 
 .sidebar-list-item {
-  padding: 20px 20px 20px 20px;
-  font-size: 18px;
+  padding: 0px; /* Reduced padding */
+  font-size: 20px; /* Optional: reduce font size */
+  margin-bottom: 2px; /* Reduced margin */
 }
 
 .sidebar-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Lighten hover effect */
+  background-color: rgba(255, 255, 255, 0.1); 
   cursor: pointer;
 }
 
 .sidebar-list-item > a {
   text-decoration: none;
-  color: #ffffff; /* White text */
+  color: #ffffff; 
 }
 
 .sidebar-responsive {

@@ -1,0 +1,96 @@
+/* App.css */
+
+/* General styles */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header .MuiTypography-root {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  .header .MuiButton-root {
+    font-size: 0.875rem;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background-color: #1976d2;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  .hero-section h5 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-section .MuiButton-root {
+    background-color: #9c27b0;
+    color: white;
+  }
+  
+  /* Features Section */
+  .features {
+    padding: 60px 0;
+    background-color: #f5f5f5;
+  }
+  
+  .features .MuiTypography-root {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  .features p {
+    text-align: center;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Testimonials */
+  .testimonials {
+    padding: 60px 0;
+    background-color: #e0e0e0;
+  }
+  
+  .testimonials .MuiAvatar-root {
+    border: 2px solid #1976d2;
+  }
+  
+  .testimonials .MuiTypography-h6 {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #333;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .footer a {
+    color: #9c27b0;
+  }
+  
+  .footer p {
+    color: #bbb;
+  }
+  

@@ -8,6 +8,7 @@ import SectionCard from './sectionCardVaccin';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import EditForm from './editVaccinForm';
 import {useAuth} from '../../authentification/AuthContext'
+import CloseIcon from '@mui/icons-material/Close';
 
 const Vaccinations = ({ childId }) => {
   const [vaccinations, setVaccinations] = useState([]);
@@ -17,6 +18,9 @@ const Vaccinations = ({ childId }) => {
   const [tableVisibility, setTableVisibility] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [expandedRows, setExpandedRows] = useState({});
+  const [refresh , setRefresh] = useState(false)
+
+
   const  {userRole} = useAuth()
   useEffect(() => {
     const fetchHospitalisations = async () => {
@@ -31,6 +35,20 @@ const Vaccinations = ({ childId }) => {
     };
     fetchHospitalisations();
   }, [childId ,open, editOpen]);
+
+  useEffect(() => {
+    const fetchHospitalisations = async () => {
+      try{
+        const data = await vaccinservices.getVaccinByChildId(childId);
+        setVaccinations(data);
+      } catch (error) {
+        console.error('Error fetching Vaccinations :', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHospitalisations();
+  }, [refresh]);
 
   const handleClose = () => {
     setOpen(false);
@@ -146,25 +164,15 @@ const Vaccinations = ({ childId }) => {
         </Table>
       )}
 
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>{selectedVaccin ? 'Edit Vaccination' : 'Add New Vaccination'}</DialogTitle>
-        <DialogContent>
-          {selectedVaccin && <EditForm initialValues={selectedVaccin} />}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="outlined" style={{ width: '100px', marginRight: '10px' }}>
-            Annuler
-          </Button>
-        </DialogActions>
-      </Dialog>
+    
       <Dialog open={editOpen} onClose={handleEditClose} maxWidth="md" fullWidth>
         <DialogContent>
           {selectedVaccin && <EditForm initialValues={selectedVaccin} />}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditClose} variant="outlined" style={{ width: '100px', marginRight: '10px' }}>
-            Annuler
-          </Button>
+          <IconButton color="primary" aria-label="close" onClick={handleEditClose}>
+            <CloseIcon />
+          </IconButton>
         </DialogActions>
       </Dialog>
     </SectionCard>
@@ -172,3 +180,16 @@ const Vaccinations = ({ childId }) => {
 };
 
 export default Vaccinations;
+
+
+/*<Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>{selectedVaccin ? 'Edit Vaccination' : 'Add New Vaccination'}</DialogTitle>
+        <DialogContent>
+          {selectedVaccin && <EditForm initialValues={selectedVaccin} />}
+        </DialogContent>
+        <DialogActions>
+          <IconButton color="primary" aria-label="close" onClick={handleEditClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogActions>
+      </Dialog>*/

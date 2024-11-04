@@ -8,6 +8,8 @@ import SectionCard from './sectionCardHosp';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import EditForm from './editHospitalisationForm';
 import { useAuth } from '../../authentification/AuthContext';
+import CloseIcon from '@mui/icons-material/Close';
+
 const   Hospitalisation = ({childId}) => {
   const [hospitalisations, setHospitalisations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,8 +86,7 @@ const   Hospitalisation = ({childId}) => {
           <TableHead>
             <TableRow>
               <TableCell><strong>Date d'entrée</strong></TableCell>
-              <TableCell><strong>Date de sortie</strong></TableCell>
-              <TableCell><strong>Nom de Dr</strong></TableCell>
+              <TableCell><strong>Date de sortie</strong></TableCell>         
               <TableCell><strong>Nom d'hopitale</strong></TableCell>
               <TableCell><strong>Raisons</strong></TableCell>
              {userRole === 'pediatre' &&(<TableCell><strong>Actions</strong></TableCell>)} 
@@ -103,10 +104,9 @@ const   Hospitalisation = ({childId}) => {
                   <TableRow>
                     <TableCell>{hospitalisation.entryDate}</TableCell>
                     <TableCell>{hospitalisation.releaseDate}</TableCell>
-                    <TableCell>{hospitalisation.DoctorName}</TableCell>
                     <TableCell>{hospitalisation.HospitalName}</TableCell>
                     <TableCell>{hospitalisation.Reasons}</TableCell>
-               {userRole === 'pediatre' &&(<TableCell>
+                 {userRole === 'pediatre' &&(<TableCell>
                       <IconButton onClick={() => handleEdit(hospitalisation)}>
                         <PencilSquare />
                       </IconButton>
@@ -143,9 +143,9 @@ const   Hospitalisation = ({childId}) => {
           {selectedHosp && <EditForm initialValues={selectedHosp} />}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditClose} variant="outlined" style={{ width: '100px', marginRight: '10px' }}>
-          Annuler
-          </Button>
+          <IconButton color="primary" aria-label="close" onClick={handleEditClose}>
+            <CloseIcon />
+          </IconButton>
         </DialogActions>
       </Dialog>
     </SectionCard>
@@ -153,3 +153,8 @@ const   Hospitalisation = ({childId}) => {
 };
 
 export default Hospitalisation;
+
+/* <TableCell><strong>Nom de Dr</strong></TableCell>
+                    <TableCell>{hospitalisation.DoctorName}</TableCell>
+
+*/

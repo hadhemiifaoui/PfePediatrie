@@ -2,14 +2,19 @@ import React from 'react';
 import { Box, List, ListItem, ListItemText, ListItemIcon, Avatar, Typography } from '@mui/material';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import FaceIcon from '@mui/icons-material/Face';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../authentification/AuthContext';
 
-const Sidebar = ({ handleItemClick, activeItem }) => {
+
+const Sidebar = ({ handleItemClick }) => {
   const { user } = useAuth();
+  if (!user) {
+    return <Typography sx={{ textAlign: 'center', marginTop: 5 }}>Loading...</Typography>;
+  }
 
   return (
-    <Box sx={{ width: 258, position: 'fixed', height: '100%', backgroundColor: '#ffff', top: 0, paddingTop: 2 }}>
+    <Box sx={{ width: 258, position: 'fixed', height: '100%', backgroundColor: '#a0adcf', top: 0, paddingTop: 2 }}>
       <List>
         <ListItem button sx={{ justifyContent: 'center', marginBottom: 2 }}>
           <Avatar  
@@ -21,7 +26,6 @@ const Sidebar = ({ handleItemClick, activeItem }) => {
         <ListItem  sx={{ justifyContent: 'center', marginBottom: 2 }}>
             <Typography  sx={{marginLeft: 1}} ><strong><em> Docteur :  {user.firstname} {user.lastname}</em></strong> </Typography> 
         
-            <Typography  sx={{marginLeft: 1}} ><strong><em> Specialité :  {user.speciality}</em></strong> </Typography> 
         </ListItem>
        
         <ListItem button onClick={() => handleItemClick('profile')}>
@@ -32,7 +36,7 @@ const Sidebar = ({ handleItemClick, activeItem }) => {
         </ListItem>
         <ListItem button onClick={() => handleItemClick('enfants')} >
           <ListItemIcon>
-            <AccountBoxIcon style={{ color: '#1d73f0' }} />
+            <FaceIcon style={{ color: '#1d73f0' }} />
           </ListItemIcon>
           <ListItemText primary="Enfants" style={{ color: '#1d73f0' }} />
         </ListItem>
@@ -48,3 +52,5 @@ const Sidebar = ({ handleItemClick, activeItem }) => {
 };
 
 export default Sidebar;
+
+/*<Typography  sx={{marginLeft: 1}} ><strong><em> Specialité :  {user.speciality}</em></strong> </Typography> */

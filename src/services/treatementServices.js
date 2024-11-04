@@ -46,9 +46,9 @@ getTreatementById : async ({id}) => {
     }
   },
 
-  updateTreatement : async ({id, data}) => {
+  updateTreatement : async (id, data) => {
     try {
-      const response = await axios.put(`${treatementservices.baseURL}/${id}`, {data} , getAuthHeaders());
+      const response = await axios.put(`${treatementservices.baseURL}/${id}`, data , getAuthHeaders());
       return response.data;
     } catch (error) {
       throw error.response.data.message || error.message;

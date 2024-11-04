@@ -30,7 +30,7 @@ const DiagnosticTreatementPlanDetailsDialog = ({ open, onClose, diagnostic }) =>
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle><Title>Plan De Traitement</Title></DialogTitle>
+      <DialogTitle><Title>Plan De Diagnostics</Title></DialogTitle>
       <DialogContent id="treatment-plan-content">
         
         <Typography variant="body1" component="div" dangerouslySetInnerHTML={{ __html: diagnostic.treatmentPlan }} />

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import userServices from "../../services/userServices";
 
 import { Card, Button, IconButton , TextField, Typography, Box, Grid,
-   Dialog, DialogTitle, DialogContent, DialogActions , styled} from '@mui/material';
+   Dialog, DialogTitle, DialogContent, DialogActions , styled,
+   Avatar} from '@mui/material';
 
 import { Twitter as TwitterIcon, Instagram as InstagramIcon, 
   Facebook as FacebookIcon, LinkedIn as LinkedInIcon, 
@@ -47,7 +48,7 @@ const Accounte = () => {
   const [isEditingProfileImage, setIsEditingProfileImage] = useState(false);
   
   const [editOpen, setEditOpen] = useState(false);
-  const [editData, setEditData] = useState({ firstname: '', lastname: '', email: '', tel: '', address: '' });
+  const [editData, setEditData] = useState({ firstname: '', lastname: '', email: '', tel: '', address: '',  speciality: ''  });
 
 
   const id = localStorage.getItem('userid');
@@ -58,7 +59,7 @@ const Accounte = () => {
         const response = await userServices.getUserById(id);
         setUser(response);
       } catch (error) {
-        console.error('Error Getting User !!', error);
+        console.error('error get user', error);
       }
     };
     getUser();
@@ -75,9 +76,10 @@ const Accounte = () => {
           email: response.email,
           tel: response.tel,
           address: response.address,
+          speciality : response.speciality
         });
       } catch (error) {
-        console.error('Error Getting User !!', error);
+        console.error('error get user', error);
       }
     };
     getUser();
@@ -103,7 +105,7 @@ const Accounte = () => {
       setUser(updatedUser);
       setIsEditingProfileImage(false);
     } catch (error) {
-      console.error('Error Updating Profile Image !!', error);
+      console.error('error update img', error);
     }
   };
 
@@ -122,7 +124,7 @@ const Accounte = () => {
       const updatedUser = await userServices.getUserById(id);
       setUser(updatedUser);
     } catch (error) {
-      console.error('Error Creating Profile !!', error);
+      console.error('error create profile ', error);
     }
   };
 
@@ -139,7 +141,7 @@ const Accounte = () => {
       setUser(updatedUser);
       setEditOpen(false);
     } catch (error) {
-      console.error('Error Updating Profile !!', error);
+      console.error('error update profil', error);
     }
   };
 
@@ -154,8 +156,8 @@ const Accounte = () => {
             style={{width: 500 , marginLeft:-300}}>
               <Box
                 sx={{
-                  width: 200,
-                  height: 200,
+                  width: 150,
+                  height: 150,
                   border: '3px solid #ddd',
                   borderRadius: '8px',
                   overflow: 'hidden',
@@ -164,10 +166,10 @@ const Accounte = () => {
                   position: 'relative',
                 }}
               >
-                <img
+                <Avatar
                   alt={user.firstname}
                   src={`http://localhost:3001/uploads/${user.image}`}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '70%', height: '70%', marginTop : "10%" , marginLeft: "10%" }}
                 />
                 <IconButton
                   sx={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}
@@ -273,6 +275,8 @@ const Accounte = () => {
               <Typography variant="h6"><strong><em><small>Email:</small></em></strong> <small><em>{user.email}</em></small></Typography>
               <Typography variant="h6"><strong><em><small>Téléphone:</small></em></strong>  <small><em>{user.tel}</em></small></Typography>
               <Typography variant="h6"><strong><em><small>Address:</small></em></strong> <small><em>{user.address}</em></small></Typography>
+              <Typography variant="h6"><strong><em><small>Spéciatlity:</small></em></strong> <small><em>{user.speciality}</em></small></Typography>
+
               <IconButton
                 sx={{ position: 'absolute', bottom: 16, right: 16, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}
                 onClick={() => setEditOpen(true)}
@@ -325,6 +329,14 @@ const Accounte = () => {
               label="Address"
               name="address"
               value={editData.address}
+              onChange={handleEditInputChange}
+              fullWidth
+              margin="normal"
+            />
+             <TextField
+              label="Spécialité"
+              name="speciality"
+              value={editData.speciality}
               onChange={handleEditInputChange}
               fullWidth
               margin="normal"

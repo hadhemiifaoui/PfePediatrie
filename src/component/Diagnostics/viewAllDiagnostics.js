@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import casesServices from '../../services/casesServices';
 import diagnosticservices from '../../services/diagnoticServices';
-import CloseIcon from '@mui/icons-material/Close';
+//import CloseIcon from '@mui/icons-material/Close';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AddReviewForm from '../Review/addReview';
 import Title from '../title/title';
 import {Container, FormControl,Grid, Typography ,Box, InputLabel, Select, MenuItem, 
   Table, IconButton,TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, Button ,Dialog,DialogContent,
    DialogTitle, DialogActions , Snackbar} from '@mui/material';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
 import DiagnosticTreatementPlanDetailsDialog from './diagnosticsDetails';
 import DiagnosticDescriptionDetails from './diagnosticDescriptionDetails';
@@ -34,14 +33,13 @@ const Diagnostics = () => {
   const [selectedCaseId, setSelectedCaseId] = useState('');
   const [selectedDiagnostic, setSelectedDiagnostic] = useState(null);
   const [dialogType, setDialogType] = useState('');
- 
+  //const [open, setOpen] = useState(false);
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [diagnosticToDelete , setDiagnosticToDelte] = useState(null);
   const [openDeleteDialog , setOpenDeleteDialog] = useState(false)
   const [openSnackbar , setOpenSnackbar] = useState(null)
   const [successMessage , setSuccessMessage] = useState('')
   const {userRole} = useAuth();
-  const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [refresh , setRefresh] = useState(false)
 
   useEffect(() => {
@@ -64,7 +62,13 @@ const Diagnostics = () => {
       if (selectedCaseId) {
         try {
           const response = await casesServices.viewDiagnostics(selectedCaseId);
-          setDiagnostics(response);
+          if( userRole === "pediatre") {
+            setDiagnostics(response.filter(diagnostic => diagnostic.status === "confirmé"))
+          }
+          else{
+            setDiagnostics(response);
+          }
+          
         } catch (err) {
           console.error(err);
           setDiagnostics([]);
@@ -74,6 +78,20 @@ const Diagnostics = () => {
     fetchDiagnostics();
   }, [selectedCaseId]);
 
+  useEffect(() => {
+    const fetchDiagnostics = async () => {
+      if (selectedCaseId) {
+        try {
+          const response = await casesServices.viewDiagnostics(selectedCaseId);
+          setDiagnostics(response);
+        } catch (err) {
+          console.error(err);
+          setDiagnostics([]);
+        }
+      }
+    };
+    fetchDiagnostics();
+  }, [refresh]);
   
     const handleCloseSnackBar = async () =>{
       setOpenSnackbar(false)
@@ -149,7 +167,10 @@ const Diagnostics = () => {
   const handleCloseAddDialog = () => {
     setOpenAddDialog(false);
   };
+  
 
+  
+  
 
 
   return (
@@ -202,7 +223,7 @@ const Diagnostics = () => {
             </Select>
           </FormControl>    
         )}
-         {userRole === 'admin' && ( 
+         {(userRole === 'admin' || userRole === 'pediatre') && ( 
           <div style={{ marginLeft: '15%' }}>
             <IconButton onClick={handleOpenAddDialog}>
               <AddCircleOutlineIcon style={{ color: '#89CFF0', fontSize: '25px' }} />
@@ -228,11 +249,14 @@ const Diagnostics = () => {
             <TableRow sx={{ backgroundColor: "#f8f9f9" }}>
               <TableCell><strong>Facteurs risques</strong></TableCell>
               <TableCell><strong>Description</strong></TableCell>
+             
+              <TableCell><strong>Plan du diagnostic</strong></TableCell>
+
               <TableCell><strong>Gravité</strong></TableCell>
-              <TableCell><strong>Plan du Traitement</strong></TableCell>
               <TableCell><strong>Crée le </strong></TableCell>
               <TableCell><strong>Mettre à jour le</strong></TableCell>
-              <TableCell><strong>Confirmé</strong></TableCell>
+              <TableCell><strong>Ajouté par</strong></TableCell>
+              <TableCell><strong>Statut</strong></TableCell>
                {userRole ==='admin' && ( <TableCell colSpan={2}>
                 <strong>Actions</strong>
               </TableCell>)}  
@@ -258,16 +282,18 @@ const Diagnostics = () => {
                       <span role="img" aria-label="notes">📝</span>
                     </Button>
                   </TableCell>
-                  <TableCell>{diagnostic.severity}</TableCell>
                   <TableCell>
                     {truncateHtml(diagnostic.treatmentPlan, 100)}
-                    <Button onClick={() => handleClickOpen(diagnostic, 'treatmentPlan')}>
-                      <span role="img" aria-label="notes">📝</span>
-                    </Button>
+                  <Button onClick={() => handleClickOpen(diagnostic, 'treatmentPlan')}>
+                    <span role="img" aria-label="notes">📝</span>
+                   </Button>
                   </TableCell>
+                  <TableCell>{diagnostic.severity}</TableCell>
+                
                   <TableCell>{new Date(diagnostic.createdAt).toLocaleString()}</TableCell>
                   <TableCell>{new Date(diagnostic.updatedAt).toLocaleString()}</TableCell>
-                  <TableCell>{diagnostic.confirmed ? "Yes" : "No"}</TableCell>
+                  <TableCell> Dr {diagnostic.createdBy ? diagnostic.createdBy.firstname : 'Inconnue'}</TableCell> 
+                  <TableCell>{diagnostic.status}</TableCell>
                 {userRole === 'admin' && (
                     <TableCell style={{ padding: '0 4px' }}>
                     <IconButton onClick={() => handleClickOpen(diagnostic, 'edit')} color="success">
@@ -296,28 +322,13 @@ const Diagnostics = () => {
         </Table>
       </TableContainer>
 
-      {userRole === 'pediatre' && (
-                <div style={{ position: 'relative' }}>
-                <Link
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setOpenReviewDialog(true)}
-                  style={{ position: 'absolute', top: '50px' }} 
-                >Ajouter votre avis</Link>
-               </div>
-               )}
-               
-        
-
       <Dialog open={openAddDialog} onClose={handleCloseAddDialog} maxWidth="md" fullWidth>
         <DialogTitle><Title>Ajouter une diagnostique</Title></DialogTitle>
         <DialogContent>
-          <AddDiagnosticForm caseId={selectedCaseId} />
+          <AddDiagnosticForm caseId={selectedCaseId} handleClose={handleCloseAddDialog}   refresh={() => setRefresh(!refresh)} />
         </DialogContent>
         <DialogActions>
-          <IconButton color="primary" aria-label="close" onClick={handleCloseAddDialog}>
-            <CloseIcon />
-          </IconButton>
+          
         </DialogActions>
       </Dialog>
 
@@ -348,7 +359,7 @@ const Diagnostics = () => {
           open={Boolean(selectedDiagnostic)}
           onClose={handleClose}
           diagnostic={selectedDiagnostic}
-          onUpdate={handleUpdate}
+          onUpdate={handleUpdate}    refresh={() => setRefresh(!refresh)} 
         />
       )}
 
@@ -365,20 +376,17 @@ const Diagnostics = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      
-       <Dialog open={openReviewDialog} onClose={() => setOpenReviewDialog(false)} maxWidth="md" fullWidth>
-        <DialogTitle>
-          <Title>Ajouter votre avis</Title>
-        </DialogTitle>
-        <DialogContent>
-          <AddReviewForm caseId={selectedCaseId} onClose={() => setOpenReviewDialog(false)}
-           refresh={() => setRefresh(!refresh)} />
-        </DialogContent>      
-      </Dialog>
-
-
     </Container>
   );
 };
 
 export default Diagnostics;
+
+/*<TableCell><strong>Plan du Traitement détaillé</strong></TableCell>*/
+
+/*<TableCell>
+{truncateHtml(diagnostic.treatmentPlan, 100)}
+<Button onClick={() => handleClickOpen(diagnostic, 'treatmentPlan')}>
+  <span role="img" aria-label="notes">📝</span>
+</Button>
+</TableCell>*/

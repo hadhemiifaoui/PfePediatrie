@@ -10,7 +10,7 @@ const ButtonStyled = styled(Button)({
   color: '#fff',
   marginTop: '15px',
   padding: '5px 10px',
-  fontSize: '12px',
+  fontSize: '10px',
   minHeight: '35px',
   width: '100px',
   alignSelf: 'center',
@@ -19,7 +19,22 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const AddSymptomForm = ({ caseId, refresh }) => {
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '100px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+
+
+const AddSymptomForm = ({handleCloseAddDialog, caseId, refresh }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -69,6 +84,9 @@ const AddSymptomForm = ({ caseId, refresh }) => {
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
+  const handleCancel = () =>{
+    handleCloseAddDialog();
+  }
 
   return (
     <Container component="form" style={{ marginTop: '0px' }} fullWidth onSubmit={handleSubmit}>
@@ -191,8 +209,9 @@ const AddSymptomForm = ({ caseId, refresh }) => {
           <MenuItem value="Fort">Fort</MenuItem>
         </Select>
       </FormControl>
-      <div style={{ marginTop: '10%' }}>
-        <ButtonStyled type="submit" style={{marginLeft:'85%'}}>
+      <div style={{ marginTop: '10%' , marginLeft:'73%' }}>
+        <CancelButtonStyled  onClick={handleCancel}>Annuler</CancelButtonStyled>
+        <ButtonStyled type="submit" >
           Ajouter
         </ButtonStyled>
       </div>

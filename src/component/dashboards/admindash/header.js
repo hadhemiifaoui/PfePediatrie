@@ -3,12 +3,12 @@ import { Col } from 'react-bootstrap';
 import { Typography, IconButton, Menu, MenuItem, Avatar, Badge } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useTranslation } from 'react-i18next';
 import ReorderIcon from '@mui/icons-material/Reorder';
-import { useNavigate } from 'react-router-dom';
+import CloseIcon from '@mui/icons-material/Close'; 
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../authentification/AuthContext';
 import notificationServices from '../../../services/notificationServices';
-import { useSocket } from '../../../Socket/socketContext'
+import { useSocket } from '../../../Socket/socketContext';
 import '../../../appearence/show.css';
 
 function Header({ OpenSidebar }) {
@@ -18,40 +18,48 @@ function Header({ OpenSidebar }) {
   const [notificationsAnchorEl, setNotificationsAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const socket = useSocket();
 
-  const socket = useSocket(); 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const data = await notificationServices.getNotifications();
-        console.log('notification :', data);
-        setNotifications(data);
-        setUnreadCount(data.filter(notification => !notification.read).length);
+        const adminNotifications = user.role === 'admin' ? data : [];
+  
+        await Promise.all(adminNotifications.map(notification => 
+          notificationServices.markAsRead(notification._id)
+        ));
+  
+        const unreadNotifications = adminNotifications.filter(notification => !notification.read);
+  
+        setNotifications(adminNotifications);
+        setUnreadCount(unreadNotifications.length);
       } catch (error) {
-        console.error('error :', error);
+        console.error('Error fetching notifications:', error);
       }
     };
+  
     fetchNotifications();
-  }, []);
+  }, [user]);
   
+
   useEffect(() => {
-    if (socket) {
-      const handleNotification = (notification) => {
-        console.log('notification :', notification);
-        
-        setNotifications((prevNotifications) => {
-          const isNotificationExists = prevNotifications.some(notif => notif._id === notification._id);
-          if (isNotificationExists) {
-            console.log('Duplicate notification detected:', notification);
-            return prevNotifications;
-          }
-          console.log('Adding new notification:', notification);
-          return [notification, ...prevNotifications];
-        });
+    if (socket && user) {
+      socket.emit('userConnected', { userId: user._id, role: user.role });
   
-        setUnreadCount((prevCount) => prevCount + 1);
+      const handleNotification = (notification) => {
+        if (user.role === 'admin') {
+          setNotifications((prevNotifications) => {
+            const isNotificationExists = prevNotifications.some(notif => notif._id === notification._id);
+            
+            if (!isNotificationExists) {
+              setUnreadCount((prevCount) => prevCount + 1);
+              return [notification, ...prevNotifications];  
+            }
+            return prevNotifications;
+          });
+        }
       };
   
       socket.on('receiveNotification', handleNotification);
@@ -60,43 +68,10 @@ function Header({ OpenSidebar }) {
         socket.off('receiveNotification', handleNotification);
       };
     }
-  }, [socket]);
- 
-
-  /*useEffect(() => {
-    if (!socket) return; 
-    const handleNotification = (notification) => {
-    console.log('Received notification:', notification);
-  
-      setNotifications((prevNotifications) => {
-        const isNotificationExists = prevNotifications.some(
-          (notif) => notif._id === notification._id
-        );
-  
-        if (isNotificationExists) {
-          console.log('Duplicate notification detected:', notification);
-          return prevNotifications;
-        }
-  
-        console.log('Adding new notification:', notification);
-        return [notification, ...prevNotifications];
-      });
-  
-      setUnreadCount((prevCount) => prevCount + 1);
-    };
-    socket.on('receiveNotification', handleNotification);
-    return () => {
-      console.log('Cleaning up socket listener');
-      socket.off('receiveNotification', handleNotification);
-    };
-  }, [socket]); 
-  
-*/
+  }, [socket, user]);
 
 
-
-
-
+  //handle  menu languye
   const handleLanguageClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -111,6 +86,7 @@ function Header({ OpenSidebar }) {
     setNotificationsAnchorEl(null);
   };
 
+  // handle menu conmpte
   const handleMenuClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
   };
@@ -119,19 +95,35 @@ function Header({ OpenSidebar }) {
     setMenuAnchorEl(null);
   };
 
+  //handle notif click 
   const handleNotificationsClick = (event) => {
     setNotificationsAnchorEl(event.currentTarget);
   };
 
+
+
   const handleMarkAsRead = async (id) => {
     try {
       await notificationServices.markAsRead(id);
-      setNotifications(notifications.map(notification =>
-        notification._id === id ? { ...notification, read: true } : notification
-      ));
-      setUnreadCount(prevCount => Math.max(prevCount - 1, 0)); 
+      setNotifications((prevNotifications) => 
+        prevNotifications.map(notification =>
+          notification._id === id ? { ...notification, read: true } : notification
+        )
+      );
+      setUnreadCount((prevCount) => Math.max(prevCount - 1, 0)); 
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error('error to mark notif as read', error);
+    }
+  };
+  
+
+  // Supprimer notification
+  const handleDeleteNotification = async (id) => {
+    try {
+      await notificationServices.deleteNot(id);
+      setNotifications(notifications.filter(notification => notification._id !== id));
+    } catch (error) {
+      console.error('eror remove notif:', error);
     }
   };
 
@@ -173,11 +165,18 @@ function Header({ OpenSidebar }) {
       >
         {notifications.map(notification => (
           <MenuItem key={notification._id} onClick={() => handleMarkAsRead(notification._id)}>
-             <Avatar
+            <Avatar
               src={`http://localhost:3001/uploads/${notification.image}`}
               alt="Sender"
               sx={{ width: 24, height: 24, marginRight: 1 }}
-            />{notification.message}
+            />
+            {notification.message}
+            <IconButton 
+              onClick={(e) => { e.stopPropagation(); handleDeleteNotification(notification._id); }}
+              size="small" 
+            >
+              <CloseIcon sx={{ color: 'red', fontSize: 'small' }} /> 
+            </IconButton>
           </MenuItem>
         ))}
       </Menu>
@@ -205,24 +204,3 @@ function Header({ OpenSidebar }) {
 
 export default Header;
 
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/

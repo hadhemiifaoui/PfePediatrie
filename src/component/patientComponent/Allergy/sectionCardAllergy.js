@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, IconButton, useTheme, Dialog, DialogContent } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, useTheme, Dialog, DialogContent, DialogActions } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddNewAllergyForm from './allergyAddForm';
 import Title from '../../title/title';
 import { useAuth } from '../../authentification/AuthContext';
+import CloseIcon from '@mui/icons-material/Close';
 
 const SectionCard = ({ title, children }) => {
   const theme = useTheme();
@@ -44,6 +45,11 @@ const SectionCard = ({ title, children }) => {
         <DialogContent>
           <AddNewAllergyForm onClose={handleClose} childId={childId}  patientId={patientId}  refresh={() => setRefresh(!refresh)}  />
         </DialogContent>
+        <DialogActions>
+          <IconButton color="primary" aria-label="close" onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogActions>
       </Dialog>
     </Card>
   );

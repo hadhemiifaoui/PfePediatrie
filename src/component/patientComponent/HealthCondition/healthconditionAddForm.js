@@ -19,19 +19,7 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const CancelButtonStyled = styled(Button)({
-  backgroundColor: '#f44336',
-  color: '#fff',
-  marginTop: '15px',
-  padding: '8px',
-  fontSize: '10px',
-  minHeight: '15px',
-  width: '75px',
-  marginRight: '10px',
-  '&:hover': {
-    backgroundColor: '#d32f2f',
-  },
-});
+
 
 const AddHealthConditionForm = ({childId , condition, onClose, patientId}) => {
   const [desease, setDesease] = useState('');
@@ -181,6 +169,8 @@ const AddHealthConditionForm = ({childId , condition, onClose, patientId}) => {
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
+          <Row>
+
           <Col xs={2}><InputLabel shrink>Statut</InputLabel></Col>
           <Col xs={4}>
             <Select
@@ -194,10 +184,13 @@ const AddHealthConditionForm = ({childId , condition, onClose, patientId}) => {
               <MenuItem value="past"><em>Pasé</em></MenuItem>
             </Select>
           </Col>
+          </Row>
+          <Row>
           <Col xs={2}><InputLabel shrink>Treaté Par</InputLabel></Col>
           <Col xs={4}>
             <TextField
               fullWidth
+              label="Dr"
               value={treatedBy}
               onChange={(e) => setTreatedBy(e.target.value)}
               id="treated-by"
@@ -205,6 +198,8 @@ const AddHealthConditionForm = ({childId , condition, onClose, patientId}) => {
               style={{ backgroundColor: '#fff' }}
             />
           </Col>
+          </Row>
+          
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={2}><InputLabel shrink>Medicament</InputLabel></Col>
@@ -245,9 +240,8 @@ const AddHealthConditionForm = ({childId , condition, onClose, patientId}) => {
         <Row className="mt-4">
           <Col md={8} />
           <Col md={4} className="d-flex justify-content-end">
-            <CancelButtonStyled variant="contained" onClick={onClose}>Annuler</CancelButtonStyled>
             <ButtonStyled type="submit" variant="contained">
-              Sauvegarder
+              Enregister
             </ButtonStyled>
           </Col>
         </Row>

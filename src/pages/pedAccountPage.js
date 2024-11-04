@@ -1,9 +1,9 @@
-import React from 'react';
-import Accounte from "../component/Accounte/PediatreAccount";
+/*import React from 'react';
+//import Accounte from "../component/Accounte/PediatreAccount";
 import Navbar1 from "../component/authentification/NavBarSign";
 import '../appearence/signupPageCss.css'; 
 import { Card, Container } from '@mui/material';
-import PedSideBar from  '../component/Accounte/PedSideBar'
+//import PedSideBar from  '../component/Accounte/PedSideBar'
 import { Box, CssBaseline } from '@mui/material';
 
 const PedAccountePage = () => {
@@ -31,4 +31,4 @@ const PedAccountePage = () => {
   );
 };
 
-export default PedAccountePage;
+export default PedAccountePage;*/

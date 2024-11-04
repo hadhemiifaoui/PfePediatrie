@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Table, TableBody, TableCell, TableHead, TableRow, IconButton, Dialog,
-  DialogTitle, DialogContent, DialogActions, Button, MenuItem, Select, Collapse, Box, Typography
+  Table, TableBody, TableCell, TableHead, TableRow, IconButton, Dialog, DialogContent, DialogActions, MenuItem, Select, Collapse, Box, Typography
 } from '@mui/material';
 import allergyservices from '../../../services/allergyServices';
 import SectionCard from './sectionCardAllergy';
@@ -9,6 +8,7 @@ import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import EditForm from './editAllergyForm';
 import { useTranslation } from 'react-i18next';
 import  {useAuth} from '../../authentification/AuthContext'
+import CloseIcon from '@mui/icons-material/Close';
 
 const Allergy = ({ childId }) => {
   
@@ -19,7 +19,8 @@ const Allergy = ({ childId }) => {
   const [tableVisibility, setTableVisibility] = useState(false);
   const [expandedRows, setExpandedRows] = useState({});
   const [editOpen, setEditOpen] = useState(false);
-
+  const [refresh , setRefresh] = useState(false)
+  
   const {t} = useTranslation()
   
   const {userRole} = useAuth();
@@ -62,7 +63,41 @@ const Allergy = ({ childId }) => {
 
 
 
-  
+  useEffect(() => {
+    const fetchAllergies = async () => {
+      try {
+        const data = await allergyservices.getAllergiesByChildId(childId);
+        console.log(childId)
+        
+        const detailedData = await Promise.all(data.map(async (allergy) => {
+          try {
+            const response = await allergyservices.getMedicationById(allergy._id);
+            console.log(response);
+            if (response && Array.isArray(response)) {
+              const medicationDetails = response.map((medication) => medication.nom || 'Medication Details Not Found');
+              allergy.medicationNames = medicationDetails;
+            } else {
+              allergy.medicationNames = ['No medications available'];
+            }
+          } catch (error) {
+            console.error(`Error fetching medications for allergy ${allergy._id}:`, error);
+            allergy.medicationNames = ['Error fetching medications'];
+          }
+          return allergy;
+        }));
+
+
+        setAllergies(detailedData);
+      } catch (error) {
+        console.error('Error fetching allergies:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (childId) { 
+      fetchAllergies();
+    }
+  }, [refresh]);
 
   const handleClose = () => {
     setOpen(false);
@@ -126,7 +161,7 @@ const Allergy = ({ childId }) => {
               <TableCell><strong>{t('medications')}</strong></TableCell>
               <TableCell><strong>{t('LastUpdated')}</strong></TableCell>
               <TableCell><strong>{t('reaction')}</strong></TableCell>
-              <TableCell><strong>{t('firstNoted')}</strong></TableCell>
+             
               <TableCell><strong>{t('notesAllergy')}</strong></TableCell>
               {userRole === 'pediatre' && ( <TableCell><strong>Actions</strong></TableCell> )} 
             </TableRow>
@@ -147,7 +182,7 @@ const Allergy = ({ childId }) => {
                     </TableCell>
                     <TableCell>{allergy.lastUpdated}</TableCell>
                     <TableCell>{allergy.reaction}</TableCell>
-                    <TableCell>{allergy.firstNoted}</TableCell>
+                    
                     <TableCell>
                       <IconButton onClick={() => handleRowExpand(allergy._id)}>
                         <span role="img" aria-label="notes">📝</span>
@@ -177,32 +212,40 @@ const Allergy = ({ childId }) => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={8} align="center">No data available</TableCell>
+                <TableCell colSpan={8} align="center">accune donnée trouvé...</TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       )}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>{selectedAllergy ? 'Edit Allergy' : 'Add New Allergy'}</DialogTitle>
-           <DialogContent>{selectedAllergy && <EditForm initialData={selectedAllergy} />}</DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="outlined" style={{ width: '100px', marginRight: '10px' }}>
-            {t('btnCancel')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      
       <Dialog open={editOpen} onClose={handleEditClose} maxWidth="md" fullWidth>
         <DialogContent>
-          {selectedAllergy && <EditForm initialData={selectedAllergy} />}
+          {selectedAllergy && <EditForm initialData={selectedAllergy}  />}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditClose} variant="outlined" style={{ width: '100px', marginRight: '10px' }}>
-           {t('btnCancel')}
-          </Button>
+       
+          <DialogActions>
+          <IconButton color="primary" aria-label="close" onClick={handleEditClose}>
+            <CloseIcon />
+          </IconButton>
         </DialogActions>
+        
       </Dialog>
     </SectionCard>
   );
 };
 export default Allergy;
+
+/* 
+<TableCell><strong>{t('firstNoted')}</strong></TableCell>  
+<TableCell>{allergy.firstNoted}</TableCell>
+<Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>{selectedAllergy ? 'Edit Allergy' : 'Add New Allergy'}</DialogTitle>
+           <DialogContent>{selectedAllergy && <EditForm initialData={selectedAllergy} refresh={() => setRefresh(!refresh)}/>}</DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant="outlined" style={{ width: '100px', marginRight: '10px' }}>
+            {t('btnCancel')}
+         </Button>
+  </DialogActions>
+</Dialog>
+*/

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table ,TableBody  ,TableCell, TableHead, TableRow, IconButton, Dialog,
-  Alert, DialogTitle, DialogContent, MenuItem, Select, Collapse, Box, Typography } from '@mui/material';
+  Alert, DialogTitle, DialogContent, MenuItem, Select, Collapse, Box, Typography, DialogActions } from '@mui/material';
 import {  Row, Col} from 'react-bootstrap';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import healthconditionservices from '../../../services/healthconditionServices';
@@ -8,6 +8,7 @@ import SectionCard from './sectioncard';
 import EditForm from './editHealthConditionForm';
 import AddHealthConditionForm from './healthconditionAddForm';
 import {useAuth} from '../../authentification/AuthContext';
+import CloseIcon from '@mui/icons-material/Close';
 
 const HealthConditions = ({ childId }) => {
   const [healthConditions, setHealthConditions] = useState([]);
@@ -190,6 +191,11 @@ const HealthConditions = ({ childId }) => {
         <DialogContent>
           {selectedCondition && <EditForm initialData={selectedCondition} />}
         </DialogContent>
+        <DialogActions>
+          <IconButton color="primary" aria-label="close" onClick={handleEditClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogActions>
       </Dialog>
     </SectionCard>
   );

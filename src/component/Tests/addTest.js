@@ -34,7 +34,21 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const AddTest = ({ caseId }) => {
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '100px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+
+const AddTest = ({handleCloseAddDialog, caseId , refresh}) => {
   const [testType, setTestType] = useState('');
   const [formData, setFormData] = useState({});
   const [successMessage , setSuccessMessage] = useState('');
@@ -55,7 +69,10 @@ const AddTest = ({ caseId }) => {
    const handleSnackbarClose = () =>{
     setOpenSnackBar(false)
    }
-
+   
+   const handleCancel = () =>{
+    handleCloseAddDialog()
+   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +81,7 @@ const AddTest = ({ caseId }) => {
       console.log('Submitting test data:', testData);
       await casesServices.addTest(caseId, testData);
       setSuccessMessage("Test Added Successufully !!");
+      refresh();
       setOpenSnackBar(true);
 
     } catch (error) {
@@ -73,7 +91,7 @@ const AddTest = ({ caseId }) => {
   };
 
   return (
-    <Container maxWidth="md" fullWidth>
+    <Container >
       <form onSubmit={handleSubmit}>
         <Row>
           <Col md={5}>
@@ -136,7 +154,12 @@ const AddTest = ({ caseId }) => {
                   <MenuItem value="Inconclusive">Inconclusive</MenuItem>
                   <MenuItem value="Non Exécuté">Non Exécuté</MenuItem>
                 </TextField>
-                <ButtonStyled type="submit" style={{ width: 80, marginLeft: 250 }}>Ajouter</ButtonStyled>
+                <div style={{ marginTop: '10%' , marginLeft:'40%'  }}>
+                       <CancelButtonStyled  onClick={handleCancel}>Annuler</CancelButtonStyled>
+                        <ButtonStyled type="submit" >
+                              Ajouter
+                             </ButtonStyled>
+                   </div>
               </Box>
             )}
             {testType === 'Test Radiologiques' && (
@@ -169,7 +192,12 @@ const AddTest = ({ caseId }) => {
                   <MenuItem value="Abnormal">Anormale</MenuItem>
                   <MenuItem value="Non Exécut">Non Exécuté</MenuItem>
                 </TextField>
-                <ButtonStyled type="submit" style={{ width: 80, marginLeft: 250 }}>Ajouter</ButtonStyled>
+                <div style={{ marginTop: '10%'  }}>
+                       <CancelButtonStyled  onClick={handleCancel}>Annuler</CancelButtonStyled>
+                        <ButtonStyled type="submit" >
+                              Ajouter
+                             </ButtonStyled>
+                   </div>
               </Box>
             )}
             {testType === 'Test Biologiques' && (
@@ -217,7 +245,12 @@ const AddTest = ({ caseId }) => {
                   <MenuItem value="Élevé">Élevé</MenuItem>
                   <MenuItem value="Non Exécuté">Non Exécuté</MenuItem>
                 </TextField>
-                <ButtonStyled type="submit" style={{ width: 80, marginLeft: 250 }}>Ajouter</ButtonStyled>
+                <div style={{ marginTop: '10%' }}>
+                       <CancelButtonStyled  onClick={handleCancel}>Annuler</CancelButtonStyled>
+                        <ButtonStyled type="submit" >
+                              Ajouter
+                             </ButtonStyled>
+                   </div>
               </Box>
             )}
           </Col>

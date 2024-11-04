@@ -23,19 +23,6 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const CancelButtonStyled = styled(Button)({
-  backgroundColor: '#f44336',
-  color: '#fff',
-  marginTop: '15px',
-  padding: '8px',
-  fontSize: '10px',
-  minHeight: '15px',
-  width: '75px',
-  marginRight: '10px',
-  '&:hover': {
-    backgroundColor: '#d32f2f',
-  },
-});
 
 const NewVaccinationForm = ({ childId , patientId}) => {
 
@@ -73,11 +60,11 @@ const NewVaccinationForm = ({ childId , patientId}) => {
 
   return (
     <Container style={{ marginTop: '0px', maxWidth: '1200px' }}>
-      <h4 style={{ marginBottom: '20px' }}><Title>Add New Vaccination</Title></h4>
+      <h4 style={{ marginBottom: '20px' }}><Title>Ajouter Nouvelle Vaccination</Title></h4>
       <Form onSubmit={handleSubmit}>
         <Row className="mb-2 align-items-center">
-          <Col md={2}><InputLabel shrink>Vaccinated For </InputLabel></Col>
-          <Col md={10}>
+          <Col md={2}><InputLabel shrink>Vacciné Pour</InputLabel></Col>
+          <Col md={8}>
             <StyledTextField
               id="vaccinatedFor"
               variant="standard"
@@ -88,12 +75,13 @@ const NewVaccinationForm = ({ childId , patientId}) => {
           </Col>
         </Row>
         <Row className="mb-2 align-items-center">
-          <Col md={2}><InputLabel shrink>Caught On</InputLabel></Col>
+          <Col md={2}><InputLabel shrink>Décrit le</InputLabel></Col>
           <Col md={10}>
             <StyledTextField
             type="date"
               id="CaughtOn"
               variant="standard"
+              style={{width :'40%'}}
               value={CaughtOn}
               onChange={(e) => setCaughtOn(e.target.value)}
               InputLabelProps={{ shrink: true }}
@@ -101,22 +89,28 @@ const NewVaccinationForm = ({ childId , patientId}) => {
           </Col>
         </Row>
         <Row className="mb-2 align-items-center">
-          <Col md={2}><InputLabel shrink>Vaccination Name</InputLabel></Col>
-          <Col md={4}>
+          <Col md={2}><InputLabel shrink>Nom </InputLabel></Col>
+          <Col md={8}>
             <FormControl fullWidth variant="standard">
               <StyledTextField
                 id="vaccinName"
+                style={{width :'100%'}}
                 value={vaccinName}
                 onChange={(e) => setVaccinName(e.target.value)}
                 variant="standard"
               />
             </FormControl>
           </Col>
-          <Col md={2}><InputLabel shrink>Details</InputLabel></Col>
-          <Col md={4}>
+          </Row>
+          <Row>
+          <Col md={2}><InputLabel shrink>Détails</InputLabel></Col>
+          <Col md={8}>
             <StyledTextField
               id="Details"
               variant="standard"
+              style={{width :'100%'}}
+              multiline
+              rows={2}
               value={Details}
               onChange={(e) => setDetails(e.target.value)}
               InputLabelProps={{ shrink: true }}
@@ -125,10 +119,11 @@ const NewVaccinationForm = ({ childId , patientId}) => {
         </Row>
         <Row className="mb-2 align-items-center">
           <Col md={2}><InputLabel shrink>Notes</InputLabel></Col>
-          <Col md={10}>
+          <Col md={8}>
             <StyledTextField
               id="notes"
               variant="standard"
+              style={{width :"100%"}}
               multiline
               rows={2}
               value={notes}
@@ -140,9 +135,9 @@ const NewVaccinationForm = ({ childId , patientId}) => {
         <Row className="mt-4">
           <Col md={8} />
           <Col md={4} className="d-flex justify-content-end">
-            <CancelButtonStyled variant="contained">Cancel</CancelButtonStyled>
+           
             <ButtonStyled type="submit" variant="contained">
-              Submit
+              Enregister
             </ButtonStyled>
           </Col>
         </Row>

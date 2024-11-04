@@ -19,8 +19,8 @@ import VaccinationPage from './pages/VaccinationPage'
 import MedicationsPage from './pages/MedicationsPage'
 import HospitalisationPage from './pages/HospitalisationPage'
 import AllergyPage from './pages/AllergiesPage'
-import VideoConsultation from './component/patientComponent/VidoéConsulation/videoCall';
-import DemandeConsultation from './component/patientComponent/VidoéConsulation/consultPlanning'
+//import VideoConsultation from './component/patientComponent/VidoéConsulation/videoCall';
+//import DemandeConsultation from './component/patientComponent/VidoéConsulation/consultPlanning'
 
 const App = () => {
   return (
@@ -49,11 +49,7 @@ const App = () => {
 
             <Route path="/dashboard1/allergies/:parentId" element={<ProtectedRoute roles={['patient', 'pediatre']}>< AllergyPage /></ProtectedRoute>} />
               
-            <Route path="/dashboard1/consultation" element={<ProtectedRoute roles={['patient', 'pediatre']}>< VideoConsultation/></ProtectedRoute>} />
-
-            <Route path="/dashboard1/planningconsultation" element={<ProtectedRoute roles={['patient', 'pediatre']}>< DemandeConsultation/></ProtectedRoute>} />
-
-
+          
 
             <Route path="/cases/:caseId" element={<CaseDetails />} />
           </Routes>
@@ -64,3 +60,11 @@ const App = () => {
 };
 
 export default App;
+
+
+
+/*  <Route path="/dashboard1/consultation" element={<ProtectedRoute roles={['patient', 'pediatre']}>< VideoConsultation/></ProtectedRoute>} />
+
+            <Route path="/dashboard1/planningconsultation" element={<ProtectedRoute roles={['patient', 'pediatre']}>< DemandeConsultation/></ProtectedRoute>} />
+
+*/

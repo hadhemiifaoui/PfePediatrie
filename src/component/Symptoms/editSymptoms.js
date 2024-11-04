@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
-import { Button, TextField, Box, Checkbox, FormControlLabel,MenuItem , FormGroup , Snackbar, styled} from '@mui/material';
+import { Button, TextField, Box, Checkbox, FormControlLabel,MenuItem ,
+  FormControl, InputLabel, Select, FormGroup , Snackbar, styled} from '@mui/material';
 import symptomServices from '../../services/symptomsServices';
 import {Row , Col} from 'react-bootstrap'
 import MuiAlert from '@mui/material/Alert'
@@ -19,10 +20,25 @@ const ButtonStyled = styled(Button)({
   },
 });
 
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '100px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
 
 
 
-const EditSymptomForm = ({ symptom, caseId }) => {
+
+
+const EditSymptomForm = ({handleCloseEditDialog, symptom , refresh}) => {
   const [symptomData, setSymptomData] = useState({
     fever: false,
     hypothermia: false,
@@ -31,7 +47,8 @@ const EditSymptomForm = ({ symptom, caseId }) => {
     neurologicalSigns: [],
     cutaneousSigns: [],
     digestiveSigns: [],
-    gravity: ''
+    gravity: '',
+    status: ''  
   });
   
   const [successMessage , setSuccessMessage] =useState('');
@@ -56,7 +73,8 @@ const EditSymptomForm = ({ symptom, caseId }) => {
         neurologicalSigns: symptom.neurologicalSigns,
         cutaneousSigns: symptom.cutaneousSigns,
         digestiveSigns: symptom.digestiveSigns,
-        gravity: symptom.gravity
+        gravity: symptom.gravity,
+        status: symptom.status
       });
     }
   }, [symptom]);
@@ -82,11 +100,16 @@ const EditSymptomForm = ({ symptom, caseId }) => {
     try {
       await symptomServices.updateSymptom(symptom._id, symptomData);
       setSuccessMessage('Symptôme mis a jour avec succé');
+      refresh();
       setOpenSnackbar(true)
     } catch (error) {
       console.error('Error updating symptom:', error);
     }
   };
+
+  const handleCancel = () => {
+    handleCloseEditDialog()
+  }
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
@@ -124,6 +147,8 @@ const EditSymptomForm = ({ symptom, caseId }) => {
            <MenuItem value="Bradycardie">Bradycardie</MenuItem>
            <MenuItem value="Normale">Normale</MenuItem>
       </TextField> </Col>
+
+
       <Col md={4}>
       <TextField
         select
@@ -212,10 +237,32 @@ const EditSymptomForm = ({ symptom, caseId }) => {
           <MenuItem value="Fort">Fort</MenuItem> 
       </TextField>
       </Col> </Row>
+
+      <Row>
+        <Col md={12}>
+          <FormControl  variant="standard" margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              name="status"
+              style={{widht : 500}}
+              value={symptomData.status}
+              onChange={handleChange}
+            >
+              <MenuItem value="confirmé">Actif</MenuItem>
+              <MenuItem value="rejeté">Inactif</MenuItem>
+              <MenuItem value="en attente">En attente</MenuItem>
+           
+            </Select>
+          </FormControl>
+        </Col>
+      </Row>
       
-      <ButtonStyled type="submit"  style={{ marginLeft:'85%' }}>
-         Modifier 
-      </ButtonStyled>
+      <div style={{ marginTop: '10%' , marginLeft:'75%' }}>
+        <CancelButtonStyled  onClick={handleCancel}>Annuler</CancelButtonStyled>
+        <ButtonStyled type="submit" >
+          Modifier
+        </ButtonStyled>
+      </div>
 
 
        <Snackbar open={openSnackBar} onClose={handleCloseSnackBar} 

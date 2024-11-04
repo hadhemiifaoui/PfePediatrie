@@ -5,8 +5,16 @@ const resources = {
   en: {
     translation: {
 
+      //accueil  
+      "textA1" : "Welcome to the PediHelp Application", 
+       "textA2" : "Helping pediatricians make better diagnoses in emergencies.",
+       "textA3" : " Get Started",
+      "textA4" : "Helping pediatricians make better diagnoses in emergencies.",
+      
        //header (nav bar)
       "PediHelp": "PediHelp",
+
+        "home" : "Home",
 
 
         //hedhi login page
@@ -52,7 +60,7 @@ const resources = {
           "video" : "Video Consultation",
           "notes" : "Notes",
           "setting" : "Setting",
-
+           "Backups":"Backups",
 
         //dashboard Patient
           //Home:
@@ -137,11 +145,17 @@ const resources = {
   },
   fr: {
     translation: {
+    
+      //accueil
+        "textA1" : "Bienvenue sur l'application AidePédiatrique", 
+        "textA2" : "Aider les pédiatres à établir de meilleurs diagnostics en cas d'urgence.",
+        "textA3" : "Démarrer",
+         "textA4" : "Aider les pédiatres à établir de meilleurs diagnostics en cas d'urgence.",
 
     //header (nav bar)
       "PediHelp": "AidePédiatrique",
-
-        
+       "home" : "Accueil",
+         
     //hedhi login page
       "loginTitle": "Connectez-vous à AidePédiatrique",
       "emailLabel": "Email",
@@ -186,7 +200,7 @@ const resources = {
           "video" : "Consultation Védeo",
           "notes" : "Notes",
           "setting" : "Paramètres",
-
+          "Backups":"Suavegardes",
   //dashboard Patient
           //Home:
           "title1" : "Bienvenue au Dashboard Pédiatrique" ,

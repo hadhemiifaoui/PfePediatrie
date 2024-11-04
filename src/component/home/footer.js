@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, Typography, Container, Link } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
       <Container maxWidth="lg">
-        <Typography variant="h6" align="center" gutterBottom>
-          Pediatrie App
-        </Typography>
         <Typography variant="subtitle1" align="center" color="text.secondary" component="p">
-          Helping pediatricians make better diagnoses in emergencies.
+            {t('textA4')}
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center">
           {'© '}

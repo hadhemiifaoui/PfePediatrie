@@ -18,7 +18,22 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const EditBacteriologicTest = ({ test, onEditSuccess }) => {
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '100px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+
+
+const EditBacteriologicTest = ({ onClose , test, onEditSuccess }) => {
   const [formData, setFormData] = useState({
     type: 'TestBacteriologiques',
     hemoculture: '',
@@ -117,8 +132,13 @@ const EditBacteriologicTest = ({ test, onEditSuccess }) => {
           </TextField>
         </Col>
       </Row>
+      <div style={{ marginTop: '10%' , marginLeft:'55%'  }}>
+                       <CancelButtonStyled  onClick={onClose}>Annuler</CancelButtonStyled>
+                        <ButtonStyled type="submit" >
+                              Modifier
+                             </ButtonStyled>
+                   </div>
 
-       <ButtonStyled type="submit" style={{marginLeft:'80%'}}>Modifier</ButtonStyled>
 
       <Snackbar
         open={openSnackBar}

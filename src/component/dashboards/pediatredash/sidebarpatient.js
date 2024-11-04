@@ -1,16 +1,16 @@
-import React , {useState, useEffect } from 'react';
+import React  from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemIcon, Card, CardContent, ListItemText, Divider } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 
-import VideoCallIcon from '@mui/icons-material/VideoCall';
+//import VideoCallIcon from '@mui/icons-material/VideoCall';   {useState, useEffect }
 import { useTranslation } from 'react-i18next';
 import VaccinesIcon from '@mui/icons-material/Vaccines';
-import NotesIcon from '@mui/icons-material/Notes';
+//import NotesIcon from '@mui/icons-material/Notes';
 
-import SettingsIcon from '@mui/icons-material/Settings';
-import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid';
+//import SettingsIcon from '@mui/icons-material/Settings';
+//import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid';
 import AirlineSeatIndividualSuiteIcon from '@mui/icons-material/AirlineSeatIndividualSuite';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
@@ -21,9 +21,6 @@ const Sidebar = ( { user }) => {
   const { t } = useTranslation();
 
   const pediatreId = localStorage.getItem('userid');
-   
-
-
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -33,9 +30,9 @@ const Sidebar = ( { user }) => {
     navigate(`/dashboard1/healthprofile/${user}`); 
   };
 
-  const handleNavigationToAllergy= () => {
+  /*const handleNavigationToAllergy= () => {
     navigate(`/dashboard1/allergies/${user}/${user.children._id}`); 
-  };
+  };*/
 
 
   return (
@@ -85,16 +82,8 @@ const Sidebar = ( { user }) => {
                    </ListItemIcon>
                   <ListItemText primary="Allergies" sx={{ '& .MuiListItemText-primary': { fontSize: '1rem' } }} />
              </ListItem> 
-            
-
-  
             <Divider />
-            <ListItem button onClick={() => handleNavigation('/settings')}>
-              <ListItemIcon>
-                <SettingsIcon sx={{ color: '#90caf9' }} />
-              </ListItemIcon>
-              <ListItemText primary={t('setting')} sx={{ '& .MuiListItemText-primary': { fontSize: '1rem' } }} />
-            </ListItem>
+
           </List>
         </div>
       </CardContent>
@@ -145,4 +134,12 @@ export default Sidebar;
                    </ListItemIcon>
                   <ListItemText primary="Medicaments" sx={{ '& .MuiListItemText-primary': { fontSize: '1rem' } }} />
              </ListItem>
-*/
+
+ <ListItem button onClick={() => handleNavigation('/settings')}>
+              <ListItemIcon>
+                <SettingsIcon sx={{ color: '#90caf9' }} />
+              </ListItemIcon>
+              <ListItemText primary={t('setting')} sx={{ '& .MuiListItemText-primary': { fontSize: '1rem' } }} />
+            </ListItem>
+
+             */

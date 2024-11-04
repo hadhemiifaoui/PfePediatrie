@@ -20,19 +20,6 @@ const ButtonStyled = styled(Button)({
   },
 });
 
-const CancelButtonStyled = styled(Button)({
-  backgroundColor: '#f44336',
-  color: '#fff',
-  marginTop: '15px',
-  padding: '8px',
-  fontSize: '10px',
-  minHeight: '15px',
-  width: '75px',
-  marginRight: '10px',
-  '&:hover': {
-    backgroundColor: '#d32f2f',
-  },
-});
 
 
 const AddNewAllergyForm = ({patientId , childId , refresh}) => {
@@ -42,7 +29,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
   const [selectedMedication, setSelectedMedication] = useState([]);
   const [lastUpdated, setLastUpdated] = useState('');
   const [reaction, setReaction] = useState('');
-  const [firstNoted, setFirstNoted] = useState('');
+  //const [firstNoted, setFirstNoted] = useState('');
   const [notes, setNotes] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -66,7 +53,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
     medications: selectedMedication,
     lastUpdated,
     reaction,
-    firstNoted,
+    //firstNoted,
     notes,
     patient : patientId,
     child: childId
@@ -81,7 +68,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
       setSelectedMedication([]);
       setLastUpdated('');
       setReaction('');
-      setFirstNoted('');
+     //setFirstNoted('');
       setNotes('');
       setSuccessMessage('Allergy Created Successfully !!');
       refresh();
@@ -93,7 +80,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
   return (
     <Container style={{ marginTop: '0px', maxWidth: '1200px' }}>
       <h4 style={{ marginBottom: '20px' }}>
-        <Title>Add New Health Allergy </Title>
+        <Title>Ajouter nouvelle allergie</Title>
       </h4>
       <Form onSubmit={submit}>
         <Row>
@@ -109,7 +96,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
         </Row>
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={2}>
-            <InputLabel shrink>Name</InputLabel>
+            <InputLabel shrink>Nom :</InputLabel>
           </Col>
           <Col xs={10}>
             <TextField
@@ -124,7 +111,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={3}>
-            <InputLabel shrink>Triggered By </InputLabel>
+            <InputLabel shrink>Déclenché par :</InputLabel>
           </Col>
           <Col xs={9}>
             <TextField
@@ -138,7 +125,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={2}>
-            <InputLabel shrink>Medications</InputLabel>
+            <InputLabel shrink>Medicaments :</InputLabel>
           </Col>
           <Col xs={10}>
             <Select
@@ -166,7 +153,7 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={2}>
-            <InputLabel shrink>Last Updated </InputLabel>
+            <InputLabel shrink>Dernière mise à jour</InputLabel>
           </Col>
           <Col xs={10}>
             <TextField
@@ -180,25 +167,10 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
             />
           </Col>
         </Form.Group>
+    
         <Form.Group as={Row} className="mb-2 align-items-center">
           <Col xs={2}>
-            <InputLabel shrink>First Noted</InputLabel>
-          </Col>
-          <Col xs={10}>
-            <TextField
-              fullWidth
-              type="date"
-              value={firstNoted}
-              onChange={(e) => setFirstNoted(e.target.value)}
-              id="first-noted"
-              variant="standard"
-              style={{ backgroundColor: '#fff' , width: '30%'}}
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}>
-            <InputLabel shrink>Reaction</InputLabel>
+            <InputLabel shrink>Réaction</InputLabel>
           </Col>
           <Col xs={10}>
             <TextField
@@ -231,9 +203,9 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
         <Row className="mt-4">
           <Col md={8} />
           <Col md={4} className="d-flex justify-content-end">
-            <CancelButtonStyled variant="contained">Cancel</CancelButtonStyled>
+           
             <ButtonStyled type="submit" variant="contained">
-              Submit
+              Enregistrer
             </ButtonStyled>
           </Col>
         </Row>
@@ -241,5 +213,40 @@ const AddNewAllergyForm = ({patientId , childId , refresh}) => {
     </Container>
   );
 };
-
 export default AddNewAllergyForm;
+
+/* <Form.Group as={Row} className="mb-2 align-items-center">
+          <Col xs={2}>
+            <InputLabel shrink>First Noted</InputLabel>
+          </Col>
+          <Col xs={10}>
+            <TextField
+              fullWidth
+              type="date"
+              value={firstNoted}
+              onChange={(e) => setFirstNoted(e.target.value)}
+              id="first-noted"
+              variant="standard"
+              style={{ backgroundColor: '#fff' , width: '30%'}}
+            />
+          </Col>
+        </Form.Group>  
+
+
+         <CancelButtonStyled variant="contained">Annuler</CancelButtonStyled>
+
+         
+const CancelButtonStyled = styled(Button)({
+  backgroundColor: '#f44336',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '75px',
+  marginRight: '10px',
+  '&:hover': {
+    backgroundColor: '#d32f2f',
+  },
+});
+*/

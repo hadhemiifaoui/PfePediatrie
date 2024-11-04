@@ -59,7 +59,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#ffff' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#f1f3f4' }}>
       <Toolbar>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             
@@ -67,11 +67,6 @@ const Navbar = () => {
         <IconButton onClick={handleClick} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#020106 ', fontSize: 17 }}>
             Home
-          </Typography>
-        </IconButton>
-        <IconButton sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#020106 ', fontSize: 17 }}>
-            About
           </Typography>
         </IconButton>
         {userRole === 'pediatre' && (
@@ -88,7 +83,7 @@ const Navbar = () => {
           onClose={handleCloseDashboardMenu}
         >
           <MenuItem onClick={() => handleDashboardChange('/dashboard')}>Admin Dashboard</MenuItem>
-          <MenuItem onClick={() => handleDashboardChange('/dashboard1')}>Patient Dashboard</MenuItem>
+          
         </Menu>
         <IconButton color="#020106 " aria-controls="language-menu" aria-haspopup="true" onClick={handleLanguageClick}>
           <LanguageIcon sx={{ color: '#020106 ' }} />
@@ -122,3 +117,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+/*<MenuItem onClick={() => handleDashboardChange('/dashboard1')}>Patient Dashboard</MenuItem>*/

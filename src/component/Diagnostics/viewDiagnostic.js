@@ -107,10 +107,10 @@ const DiagnosticsList = ({ caseId, onClose }) => {
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Facteurs/Risques</TableCell>
+                        <TableCell>Facteurs du Risques</TableCell>
                         <TableCell>Nom</TableCell>
                         <TableCell>Date du diagnostic</TableCell>
-                        <TableCell>Confirmé</TableCell>
+                       
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -123,12 +123,7 @@ const DiagnosticsList = ({ caseId, onClose }) => {
                             <TableCell>{caseItem.factorsRisks}</TableCell>
                             <TableCell>{caseItem.name}</TableCell>
                             <TableCell>{new Date(caseItem.dateDiagnosed).toLocaleDateString()}</TableCell>
-                            <TableCell>
-                              <Checkbox
-                                checked={caseItem.confirmed}
-                                color="primary"
-                              />
-                            </TableCell>
+                          
                           </TableRow>
                           {selectedDiagnosticId === caseItem._id && (
                             <TableRow>
@@ -136,13 +131,7 @@ const DiagnosticsList = ({ caseId, onClose }) => {
                                 <Collapse in={selectedDiagnosticId === caseItem._id} timeout="auto" unmountOnExit>
                                   <CardContent>
                                     <Typography variant="subtitle1" gutterBottom>
-                                      Description: {caseItem.description}
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                      Plan du Traitement: {truncateText(stripHtmlTags(caseItem.treatmentPlan), 100)}
-                                      <Button onClick={() => handleClickOpen(caseItem, caseItem.treatmentPlan)}>
-                                        <span role="img" aria-label="notes">📝</span>
-                                      </Button>
+                                      <strong>Description: </strong>{caseItem.description}
                                     </Typography>
                                   </CardContent>
                                 </Collapse>
@@ -180,137 +169,9 @@ const DiagnosticsList = ({ caseId, onClose }) => {
 
 export default DiagnosticsList;
 
-
-
-  /*  
-           <IconButton color="primary" onClick={handleOpenAddDialog}>
-                  <AddCircleIcon />
-                </IconButton>
-
-    const handleUpdateDiagnostic = async (updatedData) => {
-    try {
-      await diagnosticservices.updateDiagnostic(selectedDiagnostic._id, updatedData);
-      const updatedDiagnostics = diagnostics.map((diag) =>
-        diag._id === selectedDiagnostic._id ? { ...diag, ...updatedData } : diag
-      );
-      setDiagnostics(updatedDiagnostics);
-      setSuccessMessage('Diagnostic updated successfully');
-      setOpenSnackbar(true);
-      handleCloseEditDialog();
-    } catch (error) {
-      console.error('Error updating diagnostic:', error);
-      setError('Failed to update diagnostic');
-    }
-  };
-
-
-  const handleEditDiagnostic = (diagnostic) => {
-    setSelectedDiagnostic(diagnostic);
-    setOpenEditDialog(true);
-  };
-  
-  
-    
-  const handleConfirmDiagnostic = (diagnostic) => {
-    setSelectedDiagnostic(diagnostic);
-    setOpenTestsDialog(true); 
-  };
-
-  
-                       <TableCell>
-                              <IconButton color="primary" onClick={() => handleEditDiagnostic(caseItem)}>
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton color="secondary" onClick={() => handleDeleteDiagnostic(caseItem._id)}>
-                                <DeleteIcon />
-                              </IconButton>
-                            </TableCell>
-
-
- <Dialog open={openAddDialog} onClose={handleCloseAddDialog} maxWidth="md" fullWidth>
- <DialogTitle>Add Diagnostic</DialogTitle>
- <DialogContent>
-   <AddDiagnosticForm caseId={caseId} onSubmit={handleAddDiagnosticSubmit} onCancel={handleCloseAddDialog} />
- </DialogContent>
-</Dialog>
-
-
-<Dialog open={openEditDialog} onClose={handleCloseEditDialog} maxWidth="md" fullWidth>
- <DialogTitle>Edit Diagnostic</DialogTitle>
- <DialogContent>
-   {selectedDiagnostic && (
-     <EditDiagnosticForm
-       diagnostic={selectedDiagnostic}
-       onSubmit={handleUpdateDiagnostic}
-       onCancel={handleCloseEditDialog}
-     />
-   )}
- </DialogContent>
-</Dialog>
-         
-
-
-  const handleCloseEditDialog = () => {
-    setOpenEditDialog(false);
-    setSelectedDiagnostic(null);
-  };
-
-
-  const handleAddDiagnosticSubmit = async (diagnosticData) => {
-    try {
-      await casesServices.addDiagnostic(caseId, diagnosticData);
-      const updatedDiagnostics = await casesServices.viewDiagnostics(caseId);
-      setDiagnostics(updatedDiagnostics);
-      setSuccessMessage('Diagnostic added successfully');
-      setOpenSnackbar(true);
-      handleCloseAddDialog();
-    } catch (error) {
-      console.error('Error adding diagnostic:', error);
-      setError(error.response ? error.response.data.error : error.message);
-    }
-  };
-
-
-  
-  const handleCloseAddDialog = () => {
-    setOpenAddDialog(false);
-  };
-
-
-const handleDeleteDiagnostic = async (id) => {
-    const isConfirmed = window.confirm('Are you sure you want to remove this diagnostic?');
-    if (!isConfirmed) {
-      return;
-    }
-    try {
-      await diagnosticservices.deleteDiagnostic(id);
-      setDiagnostics(diagnostics.filter((diagnostic) => diagnostic._id !== id));
-      setSuccessMessage('Diagnostic deleted successfully');
-      setOpenSnackbar(true);
-    } catch (error) {
-      console.error('Error deleting diagnostic:', error);
-      setError('Failed to delete diagnostic');
-    }
-  };
-
-   const handleSnackbarClose = () => {
-    setOpenSnackbar(false);
-  };
-
-   <Snackbar
-            open={openSnackbar}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          >
-            <MuiAlert onClose={handleSnackbarClose} severity="success" elevation={6} variant="filled">
-              {successMessage}
-            </MuiAlert>
-          </Snackbar>
-
-
-          
-  const handleOpenAddDialog = () => {
-    setOpenAddDialog(true);
-  };
-*/
+/*<Typography variant="body1" gutterBottom>
+                                      Plan du Traitement: {truncateText(stripHtmlTags(caseItem.treatmentPlan), 100)}
+                                      <Button onClick={() => handleClickOpen(caseItem, caseItem.treatmentPlan)}>
+                                        <span role="img" aria-label="notes">📝</span>
+                                      </Button>
+                                    </Typography>*/

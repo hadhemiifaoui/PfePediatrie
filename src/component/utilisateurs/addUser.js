@@ -38,7 +38,7 @@ const CancelButtonStyled = styled(Button)({
   },
 });
 
-const NewUserForm = ({ handleClose }) => {
+const NewUserForm = ({ handleClose , refresh}) => {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -66,6 +66,7 @@ const NewUserForm = ({ handleClose }) => {
       setTel('');
       setSuccessMessage('Utilisateur crée avec succé');
       setOpenSnackBar(true);
+      refresh();
     //  handleClose();
     } catch (error) {
       console.error('Error creating user:', error);
@@ -126,7 +127,7 @@ const NewUserForm = ({ handleClose }) => {
           </Col>
         </Row>
         <Row className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>Mot de Pass</InputLabel></Col>
+          <Col xs={2}><InputLabel shrink>Mot de Passe</InputLabel></Col>
           <Col xs={10}>
             <StyledTextField
               id="password"
@@ -188,7 +189,7 @@ const NewUserForm = ({ handleClose }) => {
           </Col>
         </Row>
         <Row>
-          <Col xs={4} style={{ marginLeft: '68%' }}>
+          <Col xs={4} style={{ marginLeft: '69%' }}>
             <CancelButtonStyled onClick={handleCancel}>Annuler</CancelButtonStyled>
             <ButtonStyled type="submit">Sauvegarder</ButtonStyled>
           </Col>

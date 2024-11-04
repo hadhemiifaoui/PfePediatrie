@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, IconButton, useTheme, Dialog, DialogContent } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, useTheme, Dialog, DialogContent, DialogActions } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import NewVaccinationForm from './addVaccinForm';
 import Title from '../../title/title';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useAuth } from '../../authentification/AuthContext';
 
 const SectionCard = ({ title, children }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-
- const {userRole} = useAuth()
-
+  const [refresh , setRefresh] = useState(false)
+  const {userRole} = useAuth();
   const { user } = useAuth();
   const patientId = user ? user._id : localStorage.getItem('userid');
 
@@ -51,8 +51,13 @@ const SectionCard = ({ title, children }) => {
       </CardContent>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogContent>
-         <NewVaccinationForm onClose={handleClose}  childId={childId} patientId={patientId} />
+         <NewVaccinationForm onClose={handleClose}  childId={childId} patientId={patientId} refresh={() => setRefresh(!refresh)}/>
         </DialogContent>
+        <DialogActions>
+          <IconButton color="primary" aria-label="close" onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogActions>
       </Dialog>
     </Card>
   );

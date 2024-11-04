@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
-import { Link } from 'react-router-dom';
-import AddReviewForm from '../Review/addReview';
+//import { Link } from 'react-router-dom';
 
 import {
   Container, FormControl, Box, InputLabel, Select, MenuItem,
@@ -48,7 +47,6 @@ const Tests = () => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userRole } = useAuth();
-  const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [refresh , setRefresh] = useState(false)
 
 
@@ -91,6 +89,29 @@ const Tests = () => {
     };
     fetchTests();
   }, [selectedCaseId]);
+
+
+  useEffect(() => {
+    const fetchTests = async () => {
+      if (selectedCaseId) {
+        setLoading(true);
+        try {
+          const response = await casesServices.getTests(selectedCaseId);
+          setTestRadiologiques(response.filter(test => test.type === 'Test Radiologiques'));
+          setTestBacteriologiques(response.filter(test => test.type === 'Test Bactériologiques'));
+          setTestBiologiques(response.filter(test => test.type === 'Test Biologiques'));
+        } catch (err) {
+          console.error(err);
+          setTestRadiologiques([]);
+          setTestBacteriologiques([]);
+          setTestBiologiques([]);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchTests();
+  }, [refresh]);
 
   const handleOpenEditDialog = (test) => {
     setSelectedTest(test);
@@ -201,15 +222,15 @@ const handleDelete = async () => {
   const testTypes = {
     TestRadiologiques: {
       tests: testRadiologiques,
-      columns: ['radiographiePulmonaire', 'asp']
+      columns: ['radiographiePulmonaire', 'asp' , 'ajouté par' , 'status']
     },
     TestBacteriologiques: {
       tests: testBacteriologiques,
-      columns: ['hemoculture', 'pl', 'ecbu']
+      columns: ['hemoculture', 'pl', 'ecbu', 'ajouté par' , 'status']
     },
     TestBiologiques: {
       tests: testBiologiques,
-      columns: ['hemogramme', 'procalcitonine', 'crp']
+      columns: ['hemogramme', 'procalcitonine', 'crp', 'ajouté par' , 'status']
     }
   };
 
@@ -284,27 +305,14 @@ const handleDelete = async () => {
           renderTestTable(type, testTypes[type].tests, testTypes[type].columns)
         ))
       )}
-     {userRole === 'pediatre' && (
-       <div style={{ position: 'relative' }}>
-       <Link
-         variant="contained"
-         color="primary"
-         onClick={() => setOpenReviewDialog(true)}
-         style={{ position: 'absolute', top: '50px' }} 
-       >
-         Ajouter votre avis 
-       </Link>
-     </div>
-      )}
+    
       <Dialog open={openAddDialog} onClose={handleCloseAddDialog} maxWidth="md" fullWidth>
         <DialogTitle><Title>Ajouter Un Test</Title></DialogTitle>
         <DialogContent>
-          <AddTest onClose={handleCloseAddDialog}  caseId={selectedCaseId}/>
+          <AddTest onClose={handleCloseAddDialog}  caseId={selectedCaseId} handleCloseAddDialog={handleCloseAddDialog} refresh={() => setRefresh(!refresh)}/>
         </DialogContent>
         <DialogActions>
-          <IconButton onClick={handleCloseAddDialog}>
-            <CloseIcon />
-          </IconButton>
+        
         </DialogActions>
       </Dialog>
 
@@ -315,12 +323,10 @@ const handleDelete = async () => {
             test: selectedTest,
             onClose: handleCloseEditDialog,
             onEditSuccess: updateTestState
-          })}
+          })}  
         </DialogContent>
         <DialogActions>
-          <IconButton onClick={handleCloseEditDialog}>
-            <CloseIcon />
-          </IconButton>
+          
         </DialogActions>
       </Dialog>
 
@@ -338,17 +344,6 @@ const handleDelete = async () => {
         </DialogActions>
       </Dialog>
      
-      <Dialog open={openReviewDialog} onClose={() => setOpenReviewDialog(false)} maxWidth="md" fullWidth>
-        <DialogTitle>
-          <Title>Ajouter votre avis</Title>
-        </DialogTitle>
-        <DialogContent>
-          <AddReviewForm caseId={selectedCaseId} onClose={() => setOpenReviewDialog(false)}
-           refresh={() => setRefresh(!refresh)} />
-        </DialogContent>
-       
-      </Dialog>
-
        <Snackbar 
            onClose={handleCloseSnackBar} open={openSnackbar} 
            autoHideDuration={2000}

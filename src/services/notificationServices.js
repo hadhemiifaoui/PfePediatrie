@@ -29,6 +29,15 @@ const notificationServices = {
       throw new Error(error.response ? error.response.data.message : error.message);
     }
   },
+
+  deleteNot : async (id) => {
+    try {
+      const response = await axios.delete(`${notificationServices.baseURL}/${id}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response ? error.response.data.message : error.message);
+    }
+  },
 };
 
 export default notificationServices;

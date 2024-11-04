@@ -5,7 +5,21 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { TextField, InputLabel, Alert, Snackbar, Select, MenuItem } from '@mui/material';
 import Title from '../../title/title';
 import MuiAlert from '@mui/material/Alert';
+import { styled } from '@mui/system';
 
+
+const ButtonStyled = styled(Button)({
+  backgroundColor: '#00bcd4',
+  color: '#fff',
+  marginTop: '15px',
+  padding: '8px',
+  fontSize: '10px',
+  minHeight: '15px',
+  width: '75px',
+  '&:hover': {
+    backgroundColor: '#00acc1',
+  },
+});
 const EditForm = ({ initialData }) => {
   const [formData, setFormData] = useState({
     name: initialData.name || '',
@@ -13,7 +27,7 @@ const EditForm = ({ initialData }) => {
     medications: initialData.medications  || [],
     lastUpdated: initialData.lastUpdated || '',
     reaction: initialData.reaction || '',
-    firstNoted: initialData.firstNoted || '',
+    //firstNoted: initialData.firstNoted || '',
     notes: initialData.notes || '',
   });
 
@@ -43,7 +57,7 @@ const EditForm = ({ initialData }) => {
       medications: initialData.medications ? initialData.medications.map(med => med._id) : [],
       lastUpdated: initialData.lastUpdated || '',
       reaction: initialData.reaction || '',
-      firstNoted: initialData.firstNoted || '',
+      //firstNoted: initialData.firstNoted || '',
       notes: initialData.notes || '',
     });
   }, [initialData]);
@@ -81,7 +95,7 @@ const EditForm = ({ initialData }) => {
 
   return (
     <Container style={{ marginTop: '0px', maxWidth: '1200px' }}>
-      <h4 style={{ marginBottom: '20px' }}><Title>Edit Allergy</Title></h4>
+      <h4 style={{ marginBottom: '20px' }}><Title>Modifier l'allergie</Title></h4>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col></Col>
@@ -91,7 +105,7 @@ const EditForm = ({ initialData }) => {
           </Col>
         </Row>
         <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>Name</InputLabel></Col>
+          <Col xs={2}><InputLabel shrink>Nom</InputLabel></Col>
           <Col xs={10}>
             <TextField
               id="name"
@@ -104,7 +118,7 @@ const EditForm = ({ initialData }) => {
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>Triggered By</InputLabel></Col>
+          <Col xs={2}><InputLabel shrink>Déclenché par</InputLabel></Col>
           <Col xs={10}>
             <TextField
               id="triggeredBy"
@@ -117,7 +131,7 @@ const EditForm = ({ initialData }) => {
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>Medications</InputLabel></Col>
+          <Col xs={2}><InputLabel shrink>Medicaments</InputLabel></Col>
           <Col xs={10}>
             <Select
               id="medications"
@@ -135,7 +149,7 @@ const EditForm = ({ initialData }) => {
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>Last Updated</InputLabel></Col>
+          <Col xs={2}><InputLabel shrink>Dernière mise a jour</InputLabel></Col>
           <Col xs={10}>
             <TextField
               type="date"
@@ -149,23 +163,9 @@ const EditForm = ({ initialData }) => {
             />
           </Col>
         </Form.Group>
+       
         <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>First Noted</InputLabel></Col>
-          <Col xs={10}>
-            <TextField
-              type="date"
-              name="firstNoted"
-              fullWidth
-              value={formData.firstNoted}
-              onChange={handleChange}
-              id="firstNoted"
-              variant="standard"
-              style={{ backgroundColor: '#fff', width: '30%' }}
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="mb-2 align-items-center">
-          <Col xs={2}><InputLabel shrink>Reaction</InputLabel></Col>
+          <Col xs={2}><InputLabel shrink>Réaction</InputLabel></Col>
           <Col xs={10}>
             <TextField
               fullWidth
@@ -194,13 +194,12 @@ const EditForm = ({ initialData }) => {
           </Col>
         </Form.Group>
         <div className="d-flex justify-content-end mt-4">
-          <Button
-            type="submit"
-            variant="primary"
+          <ButtonStyled
+            type="submit"    
             style={{ marginRight: '10px' }}
           >
-            Save
-          </Button>
+            Enregistrer
+          </ButtonStyled>
         </div>
       </Form>
       {error && (
@@ -220,3 +219,20 @@ const EditForm = ({ initialData }) => {
 };
 
 export default EditForm;
+
+
+/* <Form.Group as={Row} className="mb-2 align-items-center">
+          <Col xs={2}><InputLabel shrink>First Noted</InputLabel></Col>
+          <Col xs={10}>
+            <TextField
+              type="date"
+              name="firstNoted"
+              fullWidth
+              value={formData.firstNoted}
+              onChange={handleChange}
+              id="firstNoted"
+              variant="standard"
+              style={{ backgroundColor: '#fff', width: '30%' }}
+            />
+          </Col>
+        </Form.Group>*/
