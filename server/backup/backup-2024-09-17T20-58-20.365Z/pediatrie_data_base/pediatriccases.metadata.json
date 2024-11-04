@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"fb5d0b404891440d93ebe86bc228349f","collectionName":"pediatriccases","type":"collection"}

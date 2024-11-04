@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"abe24fbd5f144662b180907e016279f1","collectionName":"testradiologiques","type":"collection"}
