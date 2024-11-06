@@ -24,35 +24,19 @@ const AddReviewForm = ({ caseId, onClose, refresh }) => {
     setOpenSnackbar(false);
   };
 
-  /*useEffect(() => {
-    const fetchUserImage = async () => {
-      try {
-        const userProfile = await userServices.getUserById(user._id);
-        setUserImage(userProfile.image);
-      } catch (error) {
-        console.error('error founding user profile:', error);
-      }
-    };
-
-    fetchUserImage();
-  }, [user._id]);*/
-
   useEffect(() => {
     const fetchUserImage = async () => {
       try {
         const userProfile = await userServices.getUserById(user._id);
         setUserImage(userProfile.image);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('error get user profile', error);
       }
     };
   
     fetchUserImage();
   }, [user._id]);
   
-
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,47 +77,6 @@ const AddReviewForm = ({ caseId, onClose, refresh }) => {
     }
   };
   
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-  
-    if (!reviewContent.trim()) {
-      setError('ecrivez votre avis avant de l`envoyer');
-      return;
-    }
-  
-    try {
-      const admins = await userServices.getUsersByRole('admin');
-  
-      await Promise.all(
-        admins.map(async (admin) => {
-          const notificationData = {
-            message: `${user.firstname} ${user.lastname} ajouter un avis: "${reviewContent}"`,
-            createdBy: user._id,
-            sentTo: admin._id,
-            image: userImage,
-            reviewContent: reviewContent, 
-          };
-  
-          await notificationservices.createNotification(notificationData);
-          if (socket) {
-            socket.emit('sendNotification', notificationData);
-          }
-        })
-      );
-      setSuccessMessage('Votre avis est envoyé avec succès');
-      setOpenSnackbar(true);
-  
-      setReviewContent('');  
-      if (refresh) refresh();
-      // onClose();
-    } catch (error) {
-      setError('echec d`envoyer');
-      console.error('Error: ', error);
-    }
-  };*/
-  
-
   return (
     <form onSubmit={handleSubmit} style={{marginLeft: '10%' , marginRight : '20%' , marginTop : "8%"}}>
        <Typography sx={{marginLeft :"5%"}}><Title>Ajouter votre avis </Title></Typography>

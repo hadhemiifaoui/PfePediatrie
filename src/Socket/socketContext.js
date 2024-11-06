@@ -11,7 +11,7 @@ export const useSocket = () => {
 export const SocketProvider = ({ children }) => {
   const socketRef = useRef();
   const [socket, setSocket] = useState(null);
-  const { user } = useAuth() || {}; // Safeguard against undefined context
+  const { user } = useAuth() || {}; 
 
   useEffect(() => {
     socketRef.current = io('http://localhost:3001', {
@@ -21,15 +21,14 @@ export const SocketProvider = ({ children }) => {
     });
 
     socketRef.current.on('connect', () => {
-      console.log('Connected to server');
+      console.log('connected to server');
       if (user) {
-        // Emit user role upon connection
         socketRef.current.emit('userConnected', { id: user._id, role: user.role });
       }
     });
 
     socketRef.current.on('connect_error', (err) => {
-      console.error('Connection error:', err);
+      console.error('erreur connection:', err);
     });
 
     setSocket(socketRef.current);
@@ -38,10 +37,10 @@ export const SocketProvider = ({ children }) => {
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current.off(); 
-        console.log('Disconnected from server');
+        console.log('disconnected from server');
       }
     };
-  }, [user]); // Adding user to the dependency array
+  }, [user]); 
 
   return (
     <SocketContext.Provider value={socketRef.current}>
