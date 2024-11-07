@@ -1,0 +1,57 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - master  # Run CI only when code is pushed to the master branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'  # Use the version you have installed locally
+
+      # -----------------------
+      # Backend (Server) Setup
+      # -----------------------
+
+      - name: Install backend dependencies
+        working-directory: server
+        run: npm install
+
+      - name: Run backend tests
+        working-directory: server
+        run: npm test  # Replace this with actual test command or skip if you don't have tests
+
+      # Run the server (if needed for client-side integration tests)
+      # But usually in CI, you don't run the server for long
+      # Comment out if unnecessary
+      #- name: Run backend server
+      #  working-directory: server
+      #  run: node server.js &
+
+      # -----------------------
+      # Frontend (Client) Setup
+      # -----------------------
+
+      - name: Check frontend package.json existence
+        run: ls -la client/ped_app  # This is just a check, may not be necessary
+
+      - name: Install frontend dependencies
+        working-directory: client/ped_app
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: client/ped_app
+        run: npm test  # Replace with your frontend test command
+
+      - name: Build frontend project
+        working-directory: client/ped_app
+        run: npm run build  # Usually builds for production
